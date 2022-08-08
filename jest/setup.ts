@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 import { HydratedDocument } from 'mongoose'
 import { IPermissions } from '../src/entities/Permissions'
 import { collectPermissions } from '../utils/permissions/collectPermissions'
+const { Events } = require('../src/entities/Events')
 const { Filters } = require('../src/entities/Filters')
 const { Users } = require('../src/entities/Users')
 const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
+export const event = new Events({})
 export const filter = new Filters({ name: 'Users', filter: { firstName: 'hello' } })
 export const role = new Roles({ name: 'USER', permissions: [], filters: [filter] })
 export const password = 'password'
@@ -37,6 +39,7 @@ beforeAll(async () => {
     }
 
     allPermissions = await collectPermissions()
+	await event.save()
 	await filter.save()
     await Promise.all(allPermissions.map(permission => permission.save()))
 
@@ -57,6 +60,7 @@ afterEach(async () => {
     if (mongoose.connection.readyState !== 1) {
         await mongoose.connect(global.__MONGO_URI__)
     }
+	await Events.deleteMany({ _id: { $nin: [event._id] } })
 	await Filters.deleteMany({ _id: { $nin: [filter._id] } })
     await Users.deleteMany({ _id: { $nin: [user._id, superadmin._id] } })
     await Roles.deleteMany({ _id: { $nin: [role._id, superadminRole._id] } })
@@ -78,5 +82,6 @@ afterAll(async () => {
     await Roles.deleteMany({})
     await Permissions.deleteMany({})
 	await Filters.deleteMany({})
+	await Events.deleteMany({})
     await mongoose.disconnect()
 })

@@ -78,7 +78,7 @@ describe('User', () => {
         })
     })
 
-    describe.only('comparePassword', () => {
+    describe('comparePassword', () => {
 
         it('returns User if the passwords match', async () => {
             const result = await Users.authenticate(user.email, password)

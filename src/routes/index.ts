@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import { config } from '../config'
 import { setupPassport } from "./auth"
+import Events from './Events'
 import Filters from './Filters'
 import Permissions from './Permissions'
 import Roles from './Roles'
@@ -17,28 +18,28 @@ export const app = express()
 const swaggerDefinition = {
     openapi: '3.0.3',
     info: {
-      title: config.npm_package_name,
-      version: config.npm_package_version,
+        title: config.npm_package_name,
+        version: config.npm_package_version,
     },
-  }
-  
-  const swaggerJSDocOptions = {
+}
+
+const swaggerJSDocOptions = {
     swaggerDefinition,
     // Paths to files containing OpenAPI definitions
     apis: ['./src/routes/*.ts', './src/routes/auth/*.ts', './src/entities/*.ts'],
-  }
+}
   
-  const swaggerSpec = swaggerJSDoc(swaggerJSDocOptions);
+const swaggerSpec = swaggerJSDoc(swaggerJSDocOptions);
   
-  const swaggerUiOptions = {
-      customCss: '.swagger-ui .topbar { display: none }',
-      swaggerOptions: {
-          filter: true,
-          tagsSorter: 'alpha'
-      }
-  }
-  app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))  
+const swaggerUiOptions = {
+    customCss: '.swagger-ui .topbar { display: none }',
+    swaggerOptions: {
+        filter: true,
+        tagsSorter: 'alpha'
+    }
+}
+app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))  
 
 app.use(helmet())
 app.use(cors(config.cors))
@@ -68,6 +69,7 @@ app.get('/ping', (req: Request, res: Response) => {
 app.use(express.json())
 setupPassport(app)
 
+app.use('/events', Events)
 app.use('/filters', Filters)
 app.use('/permissions', Permissions)
 app.use('/roles', Roles)
