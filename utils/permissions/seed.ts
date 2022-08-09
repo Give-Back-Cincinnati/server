@@ -45,7 +45,7 @@ async function seedPermissions () {
     )
 
     await Roles.findOneAndUpdate(
-        { name: 'user' },
+        { name: 'USER' },
         { name: 'USER', permissions: savedPermissions.filter((permission: HydratedDocument<unknown, IPermissions>) => permission.name === 'users.me.get')},
         { upsert: true }
     )

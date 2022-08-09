@@ -66,7 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["passport", "npm:0.5.2"],\
             ["passport-google-oauth20", "npm:2.0.0"],\
             ["passport-local", "npm:1.0.0"],\
-            ["polar-cli", "npm:0.3.4"],\
+            ["polar-cli", "npm:0.3.5"],\
             ["redis", "npm:4.1.0"],\
             ["supertest", "npm:6.2.3"],\
             ["swagger-jsdoc", "npm:6.2.1"],\
@@ -7113,11 +7113,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["polar-cli", [\
-        ["npm:0.3.4", {\
-          "packageLocation": "./.yarn/cache/polar-cli-npm-0.3.4-7146cfd895-92afa2b412.zip/node_modules/polar-cli/",\
+        ["npm:0.3.5", {\
+          "packageLocation": "./.yarn/cache/polar-cli-npm-0.3.5-7743976712-be25de117f.zip/node_modules/polar-cli/",\
           "packageDependencies": [\
-            ["polar-cli", "npm:0.3.4"],\
-            ["ts-node", "virtual:7146cfd895ce83fc71b11b59718800a5efafb4fe540843c074f9cea78f98deba954ec5a95951077c69f7c454816f562dfd6c968a15f42b2cab36e7b76e0a5102#npm:10.7.0"],\
+            ["polar-cli", "npm:0.3.5"],\
+            ["ts-node", "virtual:7743976712ec85d04453f6ce12c8b3c8392c8428dbbed5df0d644dbc564348616fc3f39ddf4309b65086e468d2f3d938c85eef7a19fe4781425cfb11b4009ac3#npm:10.7.0"],\
             ["typescript", "patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"],\
             ["yargs", "npm:17.5.0"]\
           ],\
@@ -7697,7 +7697,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["passport", "npm:0.5.2"],\
             ["passport-google-oauth20", "npm:2.0.0"],\
             ["passport-local", "npm:1.0.0"],\
-            ["polar-cli", "npm:0.3.4"],\
+            ["polar-cli", "npm:0.3.5"],\
             ["redis", "npm:4.1.0"],\
             ["supertest", "npm:6.2.3"],\
             ["swagger-jsdoc", "npm:6.2.1"],\
@@ -8385,10 +8385,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["virtual:7146cfd895ce83fc71b11b59718800a5efafb4fe540843c074f9cea78f98deba954ec5a95951077c69f7c454816f562dfd6c968a15f42b2cab36e7b76e0a5102#npm:10.7.0", {\
-          "packageLocation": "./.yarn/unplugged/ts-node-virtual-066c3e413e/node_modules/ts-node/",\
+        ["virtual:7743976712ec85d04453f6ce12c8b3c8392c8428dbbed5df0d644dbc564348616fc3f39ddf4309b65086e468d2f3d938c85eef7a19fe4781425cfb11b4009ac3#npm:10.7.0", {\
+          "packageLocation": "./.yarn/unplugged/ts-node-virtual-bd83de4023/node_modules/ts-node/",\
           "packageDependencies": [\
-            ["ts-node", "virtual:7146cfd895ce83fc71b11b59718800a5efafb4fe540843c074f9cea78f98deba954ec5a95951077c69f7c454816f562dfd6c968a15f42b2cab36e7b76e0a5102#npm:10.7.0"],\
+            ["ts-node", "virtual:7743976712ec85d04453f6ce12c8b3c8392c8428dbbed5df0d644dbc564348616fc3f39ddf4309b65086e468d2f3d938c85eef7a19fe4781425cfb11b4009ac3#npm:10.7.0"],\
             ["@cspotcode/source-map-support", "npm:0.7.0"],\
             ["@swc/core", null],\
             ["@swc/wasm", null],\
