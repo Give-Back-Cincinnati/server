@@ -47,7 +47,7 @@ const router = Router()
  *                      $ref: '#c/components/schemas/Events'
  */
 router.route('/')
-    .get(userHasPermissions(), async (req: Request, res: Response) => {
+    .get(userHasPermissions('public'), async (req: Request, res: Response) => {
         try {
             const items = await Events.find(createFilteredQuery(req.query, req))
             res.json(items)

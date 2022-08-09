@@ -50,7 +50,10 @@ export function setupPassport (app: Express) {
 				store: new RedisStore({ client: redisClient }),
 				saveUninitialized: false,
 				secret: config.redis.secret,
-				resave: false
+				resave: false,
+				cookie: {
+					maxAge: config.session_length
+				}
 			})
 		)
 	}
@@ -138,5 +141,10 @@ router.use('/login', Local)
  *          type: string
  */
 router.use('/google', Google)
+
+router.get('/logout', (req, res) => {
+	req.logout()
+	res.sendStatus(204)
+})
 
 export default router

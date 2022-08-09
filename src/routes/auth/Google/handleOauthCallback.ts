@@ -1,4 +1,5 @@
 import {IUser, Users} from "../../../entities/Users"
+import { Roles } from "../../../entities/Roles"
 import { Profile, VerifyCallback } from 'passport-google-oauth20'
 
 // {
@@ -43,10 +44,19 @@ export default async (
     done: VerifyCallback
 ) => {
     try {
+        const userRole = await Roles.findOne({ name: 'USER' })
+        if (!userRole) return done(new Error('No user role defined'))
+
+        const user = await Users.findOne({ googleId: profile.id })
+
         const userUpdate: Partial<IUser> = {
             googleId: profile.id,
             email: profile._json.email,
             profilePicture: profile._json.picture
+        }
+
+        if (!user || !user.role) {
+            userUpdate.role = userRole
         }
 
         if (profile.name) {
@@ -54,7 +64,7 @@ export default async (
             userUpdate.lastName =  profile.name.familyName
         }
 
-        const user = await Users.findOneAndUpdate(
+        const updatedUser = await Users.findOneAndUpdate(
             { googleId: profile.id },
             userUpdate,
             {
@@ -62,7 +72,7 @@ export default async (
                 returnDocument: 'after'
             }
         )
-        done(null, user)
+        done(null, updatedUser)
     } catch (e) {
         done((e as Error))
     }

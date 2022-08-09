@@ -14,7 +14,7 @@ export const config = {
     npm_package_name: process.env.npm_package_name || 'API',
     session_length: parseInt(process.env.COOKIE_MAX_AGE || (1000 * 60 * 60 * 7).toString()), // defaults to 1 week sessions
     cors: {
-        origin: 'http://localhost:3000',
+        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
         credentials: true,
     },
     mongo: {
