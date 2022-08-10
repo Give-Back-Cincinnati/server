@@ -14,5 +14,5 @@ if [ "$NODE_ENV" != "production" ]; then
   source .env
   yarn permissions:seed
   # prettify pino logs in development
-  exec yarn nodemon src/app.ts #| ./node_modules/.bin/pino-pretty
+  exec yarn nodemon src/app.ts | yarn pino-pretty
 fi

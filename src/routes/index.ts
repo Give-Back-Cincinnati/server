@@ -12,6 +12,7 @@ import Permissions from './Permissions'
 import Roles from './Roles'
 import Users from './Users'
 import auth from './auth'
+import pinoHttp from 'pino-http'
 
 export const app = express()
 
@@ -58,14 +59,15 @@ app.use(cors(config.cors))
  *        description: container is starting/inactive/errored
  */
 app.get('/ping', (req: Request, res: Response) => {
-  const { readyState } = mongoose.connection
-  let status = 503
-  if (readyState) {
-    status = 200
-  }
-  res.sendStatus(status)
+    const { readyState } = mongoose.connection
+    let status = 503
+    if (readyState) {
+        status = 200
+    }
+    res.sendStatus(status)
 })
 
+app.use(pinoHttp())
 app.use(express.json())
 setupPassport(app)
 
