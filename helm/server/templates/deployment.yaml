@@ -52,14 +52,14 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
-          livenessProbe:
-            exec:
-              command:
-                - /app/docker/docker-healthcheck.mjs
-          readinessProbe:
-            exec:
-              command:
-                - /app/docker/docker-healthcheck.mjs
+        #   livenessProbe:
+        #     exec:
+        #       command:
+        #         - /app/docker/docker-healthcheck.mjs
+        #   readinessProbe:
+        #     exec:
+        #       command:
+        #         - /app/docker/docker-healthcheck.mjs
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

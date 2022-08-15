@@ -15,10 +15,10 @@ COPY / ./
 
 RUN yarn
 
-# COPY docker/docker-healthcheck.mjs /app/docker/docker-healthcheck.mjs
-# RUN chmod +x /app/docker/docker-healthcheck.mjs
+COPY docker/docker-healthcheck.mjs /app/docker/docker-healthcheck.mjs
+RUN chmod +x /app/docker/docker-healthcheck.mjs
 
-# HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["yarn", "healthcheck"]
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["yarn", "healthcheck"]
 
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
