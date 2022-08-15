@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import pino from 'pino'
+// import pino from 'pino'
 
 // parse MONGO url fields from process.env during tests
 if (process.env.MONGO_URL) {
@@ -21,7 +21,7 @@ export const config = {
     mongo: {
         // include auth in the mongodb_uri env var
         protocol: process.env.MONGODB_PROTOCOL || 'mongodb',
-        host: process.env.MONGODB_HOST || 'mongo',
+        host: process.env.MONGODB_HOST || '192.168.0.220',
         username: process.env.MONGODB_USER || undefined,
         password: process.env.MONGODB_PASSWORD || undefined,
         database: process.env.MONGODB_DATABASE || 'index',
@@ -30,7 +30,7 @@ export const config = {
         },
       },
     redis: {
-        url: process.env.REDIS_URL || 'redis://redis:6379',
+        url: process.env.REDIS_URL || 'redis://192.168.0.220:6379',
         secret: process.env.REDIS_SECRET || 'secret'
     },
     google_oauth: {
@@ -42,7 +42,7 @@ export const config = {
     }
 }
 
-export const logger = pino()
+export const logger = console
 
 
 export default config
