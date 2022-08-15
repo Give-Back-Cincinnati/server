@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   boilerplate-ts:
-    container_name: boilerplate-ts
+    container_name: server
     build:
       context: ./
       dockerfile: ./Dockerfile
