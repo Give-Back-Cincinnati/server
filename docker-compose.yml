@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  boilerplate-ts:
+  server:
     container_name: server
     build:
       context: ./
