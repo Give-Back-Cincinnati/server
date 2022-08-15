@@ -88,8 +88,8 @@ jobs:
           --set image.repository="${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.APP_NAME }}" \
           --set image.tag="${{ github.sha }}" \
           --set imagePullSecrets[0].name=${{ secrets.PULL_SECRET }} \
-          --set serviceAccount.name="prod-server" \
-          --set podAnnotations."vault\.hashicorp\.com/role"="prod-server" \
+          --set serviceAccount.name="server" \
+          --set podAnnotations."vault\.hashicorp\.com/role"="server" \
           --set podAnnotations."vault\.hashicorp\.com/agent-inject-secret-env"="${{ secrets.NAMESPACE_PROD }}/data/server" \
           --set secretToInject="${{ secrets.NAMESPACE_PROD }}/data/server" \
           --set autoscaling.minReplicas=1 \
