@@ -39,9 +39,6 @@ jobs:
 
       - name: List Images
         run: docker images
-
-      - name: Tag Images
-        run: docker tag server_server:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.APP_NAME }}:${{ github.sha }}
 #
 #      # We should run tests at this stage...
 #
