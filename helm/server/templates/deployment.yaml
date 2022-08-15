@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wbs.fullname" . }}
+  labels:
+    {{- include "wbs.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "wbs.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+        vault.hashicorp.com/agent-inject-template-env: |
+          {{`{{ with secret`}} {{ .Values.secretToInject | quote -}} {{` -}}
+            export PUBLIC_KEY="{{ .Data.data.PUBLIC_KEY }}"
+            export REDIS_HOST="{{ .Data.data.REDIS_HOST }}"
+            export REDIS_PORT={{ .Data.data.REDIS_PORT }}
+            export REDIS_USER="{{ .Data.data.REDIS_USER }}"
+            export REDIS_PASSWORD="{{ .Data.data.REDIS_PASSWORD }}"
+            export MONGODB_PROTOCOL="{{ .Data.data.MONGODB_PROTOCOL }}"
+            export MONGODB_HOST="{{ .Data.data.MONGODB_HOST }}"
+            export MONGODB_DATABASE="{{ .Data.data.MONGODB_DATABASE }}"
+            export MONGODB_USER="{{ .Data.data.MONGODB_USER }}"
+            export MONGODB_PASSWORD="{{ .Data.data.MONGODB_PASSWORD }}"
+            export API_BASE_URL="{{ .Data.data.API_BASE_URL }}"
+            export API_REFRESH_TOKEN="{{ .Data.data.API_REFRESH_TOKEN }}"
+            export SEGMENT_WRITE_KEY="{{ .Data.data.SEGMENT_WRITE_KEY }}"
+            export TWILIO_ACCOUNT_SID="{{ .Data.data.TWILIO_ACCOUNT_SID }}"
+            export TWILIO_API_KEY="{{ .Data.data.TWILIO_API_KEY }}"
+            export TWILIO_API_SECRET="{{ .Data.data.TWILIO_API_SECRET }}"
+            export TWILIO_AUTH_TOKEN="{{ .Data.data.TWILIO_AUTH_TOKEN }}"
+            export TWILIO_APP_SID="{{ .Data.data.TWILIO_APP_SID }}"
+            export TWILIO_PHONE_NUMBER="{{ .Data.data.TWILIO_PHONE_NUMBER }}"
+            export TWILIO_WEBHOOK_HOST_URL="{{ .Data.data.TWILIO_WEBHOOK_HOST_URL }}"
+          {{- end }}`}}
+      labels:
+        {{- include "wbs.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "wbs.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - /app/docker/docker-healthcheck.mjs
+          readinessProbe:
+            exec:
+              command:
+                - /app/docker/docker-healthcheck.mjs
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -39,11 +39,11 @@ const swaggerUiOptions = {
         tagsSorter: 'alpha'
     }
 }
+app.use(cors(config.cors))
 app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))  
 
 app.use(helmet())
-app.use(cors(config.cors))
 
 /** 
  * @openapi

@@ -2,7 +2,16 @@ import { Schema, model, Types } from 'mongoose'
 
 export interface IEvents {
     _id: Types.ObjectId,
-    name: string
+    name: String,
+    description: String,
+    category: String,
+    address: String,
+    location: {
+        type: String
+        coordinates: Number[]
+    },
+    startTime: Date,
+    endTime: Date,
 }
 
 /**
@@ -26,6 +35,9 @@ export interface IEvents {
  *              category:
  *                  type: string
  *                  example: 'Hands On'
+ *              address:
+ *                  type: string
+ *                  example: '312 Walnut St. Cincinnati OH 45202'
  *              startTime:
  *                  type: string
  *                  format: date-time
@@ -37,6 +49,18 @@ export const eventsSchema = new Schema({
     name: String,
     description: String,
     category: String,
+    address: String,
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     startTime: Date,
     endTime: Date,
 }, { timestamps: true })

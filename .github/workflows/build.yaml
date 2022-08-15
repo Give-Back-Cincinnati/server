@@ -1,0 +1,96 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+
+env:
+  APP_NAME: server
+
+jobs:
+  build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Set the target Azure Kubernetes Service (AKS) cluster.
+      - name: 'Set Cluster'
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
+          resource-group: ${{ secrets.CLUSTER_RESOURCE_GROUP }}
+
+      - name: 'Setup Helm3'
+        uses: azure/setup-helm@v1
+        id: install
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Images
+        run: docker-compose build
+
+      - name: Tag Images
+        run: docker tag server:latest ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.APP_NAME }}:${{ github.sha }}
+#
+#      # We should run tests at this stage...
+#
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push to Azure Container Registry
+        run: |
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.APP_NAME }}:${{ github.sha }}
+
+      - name: 'Create AKS Image Pull Secret'
+        uses: azure/k8s-create-secret@v1
+        with:
+          container-registry-url: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+          container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          secret-name: ${{ secrets.PULL_SECRET }}
+          namespace: ${{ secrets.NAMESPACE_STAGE }}
+          force: true
+
+      - name: Deploy to Stage
+        if: ${{ contains(github.ref, 'stage') }}
+        run: |
+          helm upgrade ${{ env.APP_NAME }} helm/server/ -i --reset-values \
+          --namespace=${{ secrets.NAMESPACE_STAGE }} \
+          --values helm/server/values.yaml \
+          --set image.repository="${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.APP_NAME }}" \
+          --set image.tag="${{ github.sha }}" \
+          --set imagePullSecrets[0].name=${{ secrets.PULL_SECRET }} \
+          --set serviceAccount.name="stage-server" \
+          --set podAnnotations."vault\.hashicorp\.com/role"="stage-server" \
+          --set podAnnotations."vault\.hashicorp\.com/agent-inject-secret-env"="${{ secrets.NAMESPACE_STAGE }}/data/server" \
+          --set secretToInject="${{ secrets.NAMESPACE_STAGE }}/data/server" \
+          --set autoscaling.minReplicas=1 \
+          --set autoscaling.maxReplicas=2
+
+      - name: Deploy to Prod
+        if: ${{ contains(github.ref, 'main') }}
+        run: |
+          helm upgrade ${{ env.APP_NAME }} helm/server/ -i --reset-values \
+          --namespace=${{ secrets.NAMESPACE_PROD }} \
+          --values helm/server/values.yaml \
+          --set image.repository="${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.APP_NAME }}" \
+          --set image.tag="${{ github.sha }}" \
+          --set imagePullSecrets[0].name=${{ secrets.PULL_SECRET }} \
+          --set serviceAccount.name="prod-server" \
+          --set podAnnotations."vault\.hashicorp\.com/role"="prod-server" \
+          --set podAnnotations."vault\.hashicorp\.com/agent-inject-secret-env"="${{ secrets.NAMESPACE_PROD }}/data/server" \
+          --set secretToInject="${{ secrets.NAMESPACE_PROD }}/data/server" \
+          --set autoscaling.minReplicas=1 \
+          --set autoscaling.maxReplicas=2
