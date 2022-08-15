@@ -13,7 +13,7 @@ COPY .env* ./
 
 COPY / ./
 
-# RUN yarn
+RUN yarn
 
 COPY docker/docker-healthcheck.mjs /app/docker/docker-healthcheck.mjs
 RUN chmod +x /app/docker/docker-healthcheck.mjs
