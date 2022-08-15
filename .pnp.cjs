@@ -7321,7 +7321,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["polar-cli", "npm:0.3.5"],\
             ["ts-node", "virtual:7743976712ec85d04453f6ce12c8b3c8392c8428dbbed5df0d644dbc564348616fc3f39ddf4309b65086e468d2f3d938c85eef7a19fe4781425cfb11b4009ac3#npm:10.7.0"],\
             ["typescript", "patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"],\
-            ["yargs", "npm:17.5.0"]\
+            ["yargs", "npm:17.5.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9297,17 +9297,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:17.5.0", {\
-          "packageLocation": "./.yarn/cache/yargs-npm-17.5.0-9888d00e71-e2c662a7a6.zip/node_modules/yargs/",\
+        ["npm:17.5.1", {\
+          "packageLocation": "./.yarn/cache/yargs-npm-17.5.1-0902fa46de-00d58a2c05.zip/node_modules/yargs/",\
           "packageDependencies": [\
-            ["yargs", "npm:17.5.0"],\
+            ["yargs", "npm:17.5.1"],\
             ["cliui", "npm:7.0.4"],\
             ["escalade", "npm:3.1.1"],\
             ["get-caller-file", "npm:2.0.5"],\
             ["require-directory", "npm:2.1.1"],\
             ["string-width", "npm:4.2.3"],\
             ["y18n", "npm:5.0.8"],\
-            ["yargs-parser", "npm:21.0.1"]\
+            ["yargs-parser", "npm:21.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9320,10 +9320,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:21.0.1", {\
-          "packageLocation": "./.yarn/cache/yargs-parser-npm-21.0.1-b778fd3462-c3ea2ed12c.zip/node_modules/yargs-parser/",\
+        ["npm:21.1.1", {\
+          "packageLocation": "./.yarn/cache/yargs-parser-npm-21.1.1-8fdc003314-ed2d96a616.zip/node_modules/yargs-parser/",\
           "packageDependencies": [\
-            ["yargs-parser", "npm:21.0.1"]\
+            ["yargs-parser", "npm:21.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
