@@ -6,6 +6,7 @@ export function getMongoDBUriString () {
     return `${config.mongo.protocol}://${config.mongo.username}:${config.mongo.password}@${config.mongo.host}/${config.mongo.database}`
   }
   const uri = `${config.mongo.protocol}://${config.mongo.host}/${config.mongo.database}`
+  console.log(uri)
   return uri
 }
 
