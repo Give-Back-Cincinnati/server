@@ -55,12 +55,12 @@ spec:
             exec:
               command:
                 - yarn
-                - /app/docker/docker-healthcheck.mjs
+                - healthcheck
           readinessProbe:
             exec:
               command:
                 - yarn
-                - /app/docker/docker-healthcheck.mjs
+                - healthcheck
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
