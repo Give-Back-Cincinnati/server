@@ -21,7 +21,7 @@ export const config = {
     mongo: {
         // include auth in the mongodb_uri env var
         protocol: process.env.MONGODB_PROTOCOL || 'mongodb',
-        host: process.env.MONGODB_HOST || '192.168.0.220',
+        host: process.env.MONGODB_HOST || 'mongo',
         username: process.env.MONGODB_USER || undefined,
         password: process.env.MONGODB_PASSWORD || undefined,
         database: process.env.MONGODB_DATABASE || 'index',
@@ -30,7 +30,7 @@ export const config = {
         },
       },
     redis: {
-        url: process.env.REDIS_URL || 'redis://192.168.0.220:6379',
+        url: process.env.REDIS_URL || 'redis://redis:6379',
         secret: process.env.REDIS_SECRET || 'secret'
     },
     google_oauth: {
