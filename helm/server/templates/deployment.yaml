@@ -22,10 +22,8 @@ spec:
             export NODE_PATH="{{ .Data.data.NODE_PATH }}"
             export GOOGLE_OAUTH_CLIENT_ID="{{ .Data.data.GOOGLE_OAUTH_CLIENT_ID }}"
             export GOOGLE_OAUTH_CLIENT_SECRET="{{ .Data.data.GOOGLE_OAUTH_CLIENT_SECRET }}"
-            export REDIS_HOST="{{ .Data.data.REDIS_HOST }}"
-            export REDIS_PORT={{ .Data.data.REDIS_PORT }}
-            export REDIS_USER="{{ .Data.data.REDIS_USER }}"
-            export REDIS_PASSWORD="{{ .Data.data.REDIS_PASSWORD }}"
+            export REDIS_URL="{{ .Data.data.REDIS_URL }}"
+            export REDIS_SECRET="{{ .Data.data.REDIS_SECRET }}"
             export MONGODB_PROTOCOL="{{ .Data.data.MONGODB_PROTOCOL }}"
             export MONGODB_HOST="{{ .Data.data.MONGODB_HOST }}"
             export MONGODB_DATABASE="{{ .Data.data.MONGODB_DATABASE }}"
