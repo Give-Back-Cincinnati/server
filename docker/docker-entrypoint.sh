@@ -3,11 +3,10 @@ set -e
 
 # load env from vault in prod
 if [ "$NODE_ENV" = "production" ]; then
-    echo "source"
     source /vault/secrets/env
-    # echo "yarn permissions:seed"
-    # yarn permissions:seed
-    echo "yarn ts-node --transpile-only src/app.ts"
+    echo "seeding permissions"
+    yarn permissions:seed
+    echo "starting app"
     exec yarn ts-node --transpile-only src/app.ts
     #  exec yarn ts-node src/app.ts
 fi
