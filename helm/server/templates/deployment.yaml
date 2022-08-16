@@ -54,12 +54,14 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /app/docker/docker-healthcheck.mjs
+                - yarn
+                - healthcheck
             initialDelaySeconds: 30
           readinessProbe:
             exec:
               command:
-                - /app/docker/docker-healthcheck.mjs
+                - yarn
+                - healthcheck
             initialDelaySeconds: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
