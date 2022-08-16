@@ -8,6 +8,8 @@ if (process.env.MONGO_URL) {
     process.env.MONGODB_HOST = uri.slice(uri.indexOf('://') + 3, uri.indexOf('/', uri.indexOf('://') + 3))
 }
 
+console.log(new RegExp(process.env.CORS_ORIGIN || /https?\:\/\/localhost\:\d{1,4}/))
+
 export const config = {
     port: process.env.PORT || 3000,
     node_env: process.env.NODE_ENV,
