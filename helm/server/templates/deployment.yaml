@@ -56,11 +56,13 @@ spec:
               command:
                 - yarn
                 - healthcheck
+            initialDelaySeconds: 60
           readinessProbe:
             exec:
               command:
                 - yarn
                 - healthcheck
+            initialDelaySeconds: 60
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
