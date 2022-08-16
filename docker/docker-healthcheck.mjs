@@ -1,5 +1,5 @@
 #!/bin/sh
-':' //# https://medium.com/@patrickleet ; exec /usr/bin/env node --experimental-modules "$0" "$@"
+':' //# https://medium.com/@patrickleet ; exec /usr/bin/env yarn node --experimental-modules "$0" "$@"
 
 // we can add other thing to the healthcheck if we need to in this document
 
