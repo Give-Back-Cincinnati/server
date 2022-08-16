@@ -1,9 +1,7 @@
 #!/bin/sh
-':' //# https://medium.com/@patrickleet ; exec /usr/bin/env node --experimental-modules "$0" "$@"
+':' //# https://medium.com/@patrickleet ; exec yarn healthcheck
 
 // we can add other thing to the healthcheck if we need to in this document
-
-// process.exit(0)
 
 import axios from 'axios'
 
