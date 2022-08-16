@@ -54,14 +54,16 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /bin/sh
+                - sh
+                - -c
                 - yarn
                 - healthcheck
             initialDelaySeconds: 30
           readinessProbe:
             exec:
               command:
-                - /bin/sh
+                - sh
+                - -c
                 - yarn
                 - healthcheck
             initialDelaySeconds: 30
