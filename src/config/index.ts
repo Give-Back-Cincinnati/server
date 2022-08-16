@@ -8,8 +8,6 @@ if (process.env.MONGO_URL) {
     process.env.MONGODB_HOST = uri.slice(uri.indexOf('://') + 3, uri.indexOf('/', uri.indexOf('://') + 3))
 }
 
-console.log(new RegExp(process.env.CORS_ORIGIN || /https?\:\/\/localhost\:\d{1,4}/))
-
 export const config = {
     port: process.env.PORT || 3000,
     node_env: process.env.NODE_ENV,
@@ -17,7 +15,7 @@ export const config = {
     npm_package_name: process.env.npm_package_name || 'API',
     session_length: parseInt(process.env.COOKIE_MAX_AGE || (1000 * 60 * 60 * 7).toString()), // defaults to 1 week sessions
     cors: {
-        origin: new RegExp(process.env.CORS_ORIGIN || /https?\:\/\/localhost\:\d{1,4}/),
+        origin: new RegExp(process.env.CORS_ORIGIN || /https?:\/\/localhost:\d{1,4}/),
         credentials: true,
     },
     mongo: {

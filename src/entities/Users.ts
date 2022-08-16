@@ -77,15 +77,16 @@ export const userSchema = new Schema({
     email: String,
     profilePicture: String,
     googleId: String,
-    role: { type: Types.ObjectId, ref: 'Roles' },
+    role: { type: Schema.Types.ObjectId, ref: 'Roles' },
     password: { type: String, select: false },
 }, { timestamps: true })
 
 userSchema.pre('save', async function () {
-    if (!this.role) {
-        this.role = await Roles.findOne({ name: 'USER' })
+    const role = await Roles.findOne({ name: 'USER' })
+    if (!this.role && role) {
+        this.role = role._id
     }
-    if (!this.isModified('password')) return
+    if (!this.isModified('password') || !this.password) return
     this.password = await bcrypt.hash(this.password, config.bcrypt.saltRounds)
 })
 

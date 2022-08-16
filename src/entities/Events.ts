@@ -2,13 +2,13 @@ import { Schema, model, Types } from 'mongoose'
 
 export interface IEvents {
     _id: Types.ObjectId,
-    name: String,
-    description: String,
-    category: String,
-    address: String,
+    name: string,
+    description: string,
+    category: string,
+    address: string,
     location: {
-        type: String
-        coordinates: Number[]
+        type: string
+        coordinates: number[]
     },
     startTime: Date,
     endTime: Date,

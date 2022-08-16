@@ -142,9 +142,10 @@ router.use('/login', Local)
  */
 router.use('/google', Google)
 
-router.get('/logout', (req, res) => {
-	req.logout()
-	res.sendStatus(204)
+router.get('/logout', async (req, res) => {
+	req.logout(() => {
+        res.sendStatus(204)
+    })
 })
 
 export default router

@@ -1,4 +1,4 @@
-import { IEvents, Events } from './Events'
+import { Events } from './Events'
 
 describe('Events', () => {
 

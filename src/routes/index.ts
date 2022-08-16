@@ -44,7 +44,6 @@ app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))  
 
 app.use(helmet())
-app.use(pinoHttp())
 
 /** 
  * @openapi
@@ -68,6 +67,7 @@ app.get('/ping', (req: Request, res: Response) => {
     res.sendStatus(status)
 })
 
+app.use(pinoHttp())
 app.use(express.json())
 setupPassport(app)
 

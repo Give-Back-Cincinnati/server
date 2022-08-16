@@ -59,13 +59,15 @@ export interface IRoles {
  */
 export const rolesSchema = new Schema({
     name: String,
-    permissions: [{ type: Types.ObjectId, ref: 'Permissions'} ],
-    filters: [{ type: Types.ObjectId, ref: 'Filters' } ],
+    permissions: [{ type: Schema.Types.ObjectId, ref: 'Permissions'} ],
+    filters: [{ type: Schema.Types.ObjectId, ref: 'Filters' } ],
 }, { timestamps: true })
 
 rolesSchema.pre('save', function () {
     if (!this.isModified('name')) return
-    this.name = this.name.toUpperCase()
+    if (this.name) {
+        this.name = this.name.toUpperCase()
+    }
 })
 
 export const Roles = model<IRoles>('Roles', rolesSchema)
