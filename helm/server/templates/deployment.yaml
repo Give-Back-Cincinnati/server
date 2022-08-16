@@ -19,6 +19,7 @@ spec:
       {{- end }}
         vault.hashicorp.com/agent-inject-template-env: |
           {{`{{ with secret`}} {{ .Values.secretToInject | quote -}} {{` -}}
+            export CORS_ORIGIN="{{ .Data.data.NODE_PATH }}"
             export NODE_PATH="{{ .Data.data.NODE_PATH }}"
             export GOOGLE_OAUTH_CLIENT_ID="{{ .Data.data.GOOGLE_OAUTH_CLIENT_ID }}"
             export GOOGLE_OAUTH_CLIENT_SECRET="{{ .Data.data.GOOGLE_OAUTH_CLIENT_SECRET }}"
