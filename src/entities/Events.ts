@@ -23,9 +23,6 @@ export interface IEvents {
  *          required:
  *              - name
  *          properties:
- *              _id: 
- *                  type: string
- *                  example: '627afea4acf098768c92b855'
  *              name:
  *                  type: string
  *                  example: 'Back to School'
@@ -46,23 +43,21 @@ export interface IEvents {
  *                  format: date-time
  */
 export const eventsSchema = new Schema({
-    name: String,
-    description: String,
-    category: String,
-    address: String,
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    category: { type: String, required: true },
+    address: { type: String, required: true },
     location: {
         type: {
             type: String,
             enum: ['Point'],
-            required: true
         },
         coordinates: {
             type: [Number],
-            required: true
         }
     },
-    startTime: Date,
-    endTime: Date,
+    startTime: { type: Date, required: true },
+    endTime: { type: Date, required: true },
 }, { timestamps: true })
 
 export const Events = model<IEvents>('Events', eventsSchema)

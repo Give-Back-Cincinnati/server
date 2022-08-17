@@ -44,7 +44,7 @@ const router = Router()
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#c/components/schemas/Events'
+ *                      $ref: '#/components/schemas/Events'
  */
 router.route('/')
     .get(userHasPermissions('public'), async (req: Request, res: Response) => {
