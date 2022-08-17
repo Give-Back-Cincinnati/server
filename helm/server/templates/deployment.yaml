@@ -55,12 +55,12 @@ spec:
             exec:
               command:
                 - /app/docker/docker-healthcheck.mjs
-            initialDelaySeconds: 300
+            initialDelaySeconds: 10
           readinessProbe:
             exec:
               command:
                 - /app/docker/docker-healthcheck.mjs
-            initialDelaySeconds: 300
+            initialDelaySeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
