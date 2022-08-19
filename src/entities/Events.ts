@@ -22,7 +22,15 @@ export interface IEvents {
  *          type: object
  *          required:
  *              - name
+ *              - description
+ *              - category
+ *              - address
+ *              - startTime
+ *              - endTime
  *          properties:
+ *              _id:
+ *                  type: string
+ *                  readonly: true
  *              name:
  *                  type: string
  *                  example: 'Back to School'
@@ -31,7 +39,8 @@ export interface IEvents {
  *                  example: 'This is a longer description of an event...'
  *              category:
  *                  type: string
- *                  example: 'Hands On'
+ *                  enum: ['Hands-On', 'Social', 'Interactive', 'Civic Engagement', 'New Member', 'Cincy YP', 'Leadership', 'Fall Feast', 'Paint the Town', 'Give Back Beyond Cincinnati']
+ *                  example: 'Hands-On'
  *              address:
  *                  type: string
  *                  example: '312 Walnut St. Cincinnati OH 45202'

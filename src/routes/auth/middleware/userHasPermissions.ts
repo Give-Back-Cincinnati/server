@@ -3,7 +3,6 @@ import { SerializedUser } from "../serialization"
 import { publicRoute } from "./publicRoute"
 
 function permissionsCheck (req: Request, res: Response, next: NextFunction) {
-    console.log(req.isAuthenticated())
     // exit if the request is not from a logged-in user
     if (!req.isAuthenticated()) return res.sendStatus(401)
 
