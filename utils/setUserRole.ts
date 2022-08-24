@@ -14,6 +14,8 @@ async function upgradeUser (email: string, role: string) {
     } catch (e: any) {
         console.error(e?.message)
         process.exit(1)
+    } finally {
+        process.exit(0)
     }
 }
 
