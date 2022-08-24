@@ -15,6 +15,7 @@
         "lint": "yarn eslint --ext .ts ./src",
         "lint-fix": "yarn eslint --ext .ts ./src --fix",
         "permissions:seed": "yarn ts-node utils/permissions/seed.ts",
+        "user:setRole": "yarn ts-node utils/setUserRole.ts",
         "healthcheck": "yarn ts-node docker/docker-healthcheck.mjs"
     },
     "dependencies": {
