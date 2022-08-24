@@ -65,6 +65,7 @@ export interface IUser {
  *              email:
  *                  type: string
  *                  example: 'clark@dailyplanet.news'
+ *                  pattern: '^.+\@.+\..{2,}$'
  *              profilePicture:
  *                  type: string
  *                  example: 'https://google.com/test.png'
@@ -76,7 +77,7 @@ export const userSchema = new Schema({
     lastName: String,
     email: String,
     profilePicture: String,
-    googleId: String,
+    googleId: { type: String, select: false },
     role: { type: Schema.Types.ObjectId, ref: 'Roles' },
     password: { type: String, select: false },
 }, { timestamps: true })

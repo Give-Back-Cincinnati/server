@@ -37,6 +37,7 @@ export interface IEvents {
  *              description:
  *                  type: string
  *                  example: 'This is a longer description of an event...'
+ *                  maxLength: 1000
  *              category:
  *                  type: string
  *                  enum: ['Hands-On', 'Social', 'Interactive', 'Civic Engagement', 'New Member', 'Cincy YP', 'Leadership', 'Fall Feast', 'Paint the Town', 'Give Back Beyond Cincinnati']
