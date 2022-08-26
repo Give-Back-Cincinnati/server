@@ -2,7 +2,7 @@ import { logger } from '../config/index'
 import { Router, Response, Request } from 'express'
 import { Events } from '../entities/Events'
 import { userHasPermissions } from './auth/middleware'
-import { createFilteredQuery } from '../entities/queryUtils'
+import { createFilteredQuery, createQueryOptions } from '../entities/queryUtils'
 
 /**
  * @openapi
@@ -20,6 +20,27 @@ const router = Router()
  *    operationId: searchEvents
  *    summary: Search Events records
  *    description: Get Events records
+ *    parameters:
+ *      - in: query
+ *        name: limit
+ *        schema:
+ *            type: integer
+ *            minimum: 1
+ *      - in: query
+ *        name: offset
+ *        schema:
+ *            type: integer
+ *      - in: query
+ *        name: sort
+ *        schema:
+ *            type: string
+ *            enum: [name, category, startTime, endTime]
+ *      - in: query
+ *        name: order
+ *        schema:
+ *            type: string
+ *            enum: [asc, desc]
+ *            default: asc
  *    responses:
  *        200:
  *          content:
@@ -49,8 +70,14 @@ const router = Router()
 router.route('/')
     .get(userHasPermissions('public'), async (req: Request, res: Response) => {
         try {
-            const items = await Events.find(createFilteredQuery(req.query, req))
-            res.json(items)
+            const { search }: { 
+                search?: Record<string, unknown>,
+            } = req.query
+
+            const queryOptions = createQueryOptions(req.query)
+            
+            const items = await Events.find(createFilteredQuery(search as Record<string,unknown>, req), undefined, queryOptions)
+            return res.json(items)
         } catch (e) {
             res.sendStatus(500)
             logger.error(e)

@@ -1,11 +1,13 @@
 import { Events } from './Events'
 
+const eventData = { name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()}
+
 describe('Events', () => {
 
-    it('creates a Events', async () => {
+    it('creates an Event', async () => {
         expect.assertions(2)
         
-        const entity = await new Events({})
+        const entity = await new Events(eventData)
             .save()
         expect(entity).toBeDefined()
 
@@ -13,10 +15,10 @@ describe('Events', () => {
         expect(found).toBeDefined()
     })
 
-    it('updates a Events', async () => {
+    it('updates an Event', async () => {
         expect.assertions(2)
         
-        const entity = await new Events({})
+        const entity = await new Events(eventData)
             .save()
         expect(entity).toBeDefined()
 
@@ -25,10 +27,10 @@ describe('Events', () => {
         expect(found?.name).toBe('updated')
     })
 
-    it('deletes a Events', async () => {
+    it('deletes an Event', async () => {
         expect.assertions(2)
         
-        const entity = await new Events({})
+        const entity = await new Events(eventData)
             .save()
         expect(entity).toBeDefined()
 

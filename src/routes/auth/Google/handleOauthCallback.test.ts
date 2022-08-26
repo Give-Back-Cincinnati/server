@@ -34,11 +34,15 @@ describe('Google/handleOauthCallback', function () {
     it('inserts a user if they don\'t already exist', async () => {
         await handleOauthCallback('access', 'refresh', profile, mockCallback)
 
-        const foundUser = await Users.findOne({ googleId: profile.id })
+        const foundUser = await Users.findOne({ googleId: profile.id }).select('+googleId')
 
         expect(foundUser).not.toBeNull()
         expect(foundUser?.googleId).toEqual(profile.id)
-        expect(mockCallback).toHaveBeenCalledWith(null, foundUser)
+        expect(mockCallback).toHaveBeenCalledWith(null, expect.objectContaining({
+            firstName: foundUser?.firstName,
+            lastName: foundUser?.lastName,
+            _id: foundUser?._id
+        }))
     })
 
     it('inserts a user if they don\'t have a name object', async () => {

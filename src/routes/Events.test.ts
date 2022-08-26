@@ -5,6 +5,8 @@ import { getLoggedInSuperAdminAgent } from '../../jest/utilities'
 import { app } from './index'
 import { Events } from '../entities/Events'
 
+const eventData = { name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()}
+
 // suppress error messages
 jest.spyOn(console, 'error')
     .mockImplementation(() => ({}))
@@ -45,23 +47,23 @@ describe('/api/Events', () => {
     describe('POST', () => {
             
         it('returns a 201', async () => {
-            const response = await superadminAgent.post('/Events').send({})
+            const response = await superadminAgent.post('/Events').send(eventData)
             expect(response.statusCode).toBe(201)
         })
 
         it('returns the new Events', async () => {
-            const response = await superadminAgent.post('/Events').send({ name: 'Events' })
-            expect(response.body).toHaveProperty('name', 'Events')
+            const response = await superadminAgent.post('/Events').send(eventData)
+            expect(response.body).toHaveProperty('name', eventData.name)
         })
 
         it('inserts the new Events', async () => {
-            const response = await superadminAgent.post('/Events').send({ name: 'Events' })
+            const response = await superadminAgent.post('/Events').send(eventData)
             const item = await Events.findById(response.body._id)
-            expect(item).toHaveProperty('name', 'Events')
+            expect(item).toHaveProperty('name', eventData.name)
         })
 
         it('returns a 401 for a user without permissions', async () => {
-            const response = await request(app).post('/Events').send({ name: 'Events' })
+            const response = await request(app).post('/Events').send(eventData)
             expect(response.statusCode).toBe(401)
         })
 
