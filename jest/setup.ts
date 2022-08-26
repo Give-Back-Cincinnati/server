@@ -8,7 +8,7 @@ const { Users } = require('../src/entities/Users')
 const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
-export const event = new Events({})
+export const event = new Events({ name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()})
 export const filter = new Filters({ name: 'Users', filter: { firstName: 'hello' } })
 export const role = new Roles({ name: 'USER', permissions: [], filters: [filter] })
 export const password = 'password'
