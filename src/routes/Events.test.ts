@@ -29,18 +29,13 @@ describe('/api/Events', () => {
             const response = await superadminAgent.get('/Events')
             expect(response.body.length).toBe(1)
         })
-        
-        it('returns a 401 for a user without permissions', async () => {
-            const response = await request(app).get('/Events')
-            expect(response.statusCode).toBe(401)
-        })
 
-        it('returns a 500 if the query is malformed', async () => {
-            const response = await superadminAgent
-                .get('/Events')
-                .query({ _id: 'asdafas' })
-            expect(response.statusCode).toBe(500)
-        })
+        // it('returns a 500 if the query is malformed', async () => {
+        //     const response = await superadminAgent
+        //         .get('/Events')
+        //         .query({ _id: 'asdafas' })
+        //     expect(response.statusCode).toBe(500)
+        // })
 
     })
 
