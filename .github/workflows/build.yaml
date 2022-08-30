@@ -1,18 +1,24 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - main
-      - stage
+  workflow_run:
+    workflows: [Test]
+    types: [completed]
+    branches: [main]
 
 env:
   APP_NAME: server
 
 jobs:
+  on-failure:
+      runs-on: ubuntu-latest
+      if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+      steps:
+        - run: echo 'The triggering workflow failed'
   build:
     name: Docker Build
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
