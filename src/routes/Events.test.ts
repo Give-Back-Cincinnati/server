@@ -30,13 +30,6 @@ describe('/api/Events', () => {
             expect(response.body.length).toBe(1)
         })
 
-        // it('returns a 500 if the query is malformed', async () => {
-        //     const response = await superadminAgent
-        //         .get('/Events')
-        //         .query({ _id: 'asdafas' })
-        //     expect(response.statusCode).toBe(500)
-        // })
-
     })
 
     describe('POST', () => {

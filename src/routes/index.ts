@@ -4,6 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import pinoHttp from 'pino-http'
 import { config } from '../config'
 import { setupPassport } from "./auth"
 import Events from './Events'
@@ -12,7 +13,6 @@ import Permissions from './Permissions'
 import Roles from './Roles'
 import Users from './Users'
 import auth from './auth'
-import pinoHttp from 'pino-http'
 
 export const app = express()
 
@@ -41,7 +41,7 @@ const swaggerUiOptions = {
 }
 app.use(cors(config.cors))
 app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))  
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))
 
 app.use(helmet())
 
@@ -67,7 +67,7 @@ app.get('/ping', (req: Request, res: Response) => {
     res.sendStatus(status)
 })
 
-// app.use(pinoHttp())
+app.use(pinoHttp())
 app.use(express.json())
 setupPassport(app)
 

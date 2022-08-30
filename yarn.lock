@@ -5602,16 +5602,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"polar-cli@npm:latest":
-  version: 0.3.5
-  resolution: "polar-cli@npm:0.3.5"
+"polar-cli@npm:0.4.0":
+  version: 0.4.0
+  resolution: "polar-cli@npm:0.4.0"
   dependencies:
     ts-node: ^10.7.0
     typescript: ^4.6.3
     yargs: ^17.4.1
   bin:
     polar: ./utils/index.ts
-  checksum: be25de117f759ae1c56abb68b7332fa3c1a2c89e5144d7e88899716758674313247faa74c4d06e451c0d257390abd95c7a316af265eac50eaad1348709a7cfd5
+  checksum: ad4ae852fcc20a11d62247a0b4346be2c7731a32d8e4c0d898940d4ac2f99a7f11eaef4eb017ccadf16163eb82121ff2d4e8141c7cab5c627ec30015f5c1b6bf
   languageName: node
   linkType: hard
 
@@ -6141,7 +6141,7 @@ __metadata:
     pino: ^8.4.0
     pino-http: ^8.2.0
     pino-pretty: ^8.1.0
-    polar-cli: latest
+    polar-cli: 0.4.0
     redis: ^4.0.6
     supertest: ^6.2.2
     swagger-jsdoc: ^6.2.1

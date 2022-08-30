@@ -2,7 +2,7 @@ import { logger } from '../config/index'
 import { Router, Response, Request } from 'express'
 import { Permissions } from '../entities/Permissions'
 import { userHasPermissions } from "./auth/middleware"
-import { createFilteredQuery } from '../entities/queryUtils'
+import { createFilteredQuery, createQueryOptions } from '../entities/queryUtils'
 
 /**
  * @openapi
@@ -21,6 +21,27 @@ const router = Router()
  *    operationId: searchPermissions
  *    summary: Search permissions records
  *    description: Get permissions records
+ *    parameters:
+ *      - in: query
+ *        name: limit
+ *        schema:
+ *            type: integer
+ *            minimum: 1
+ *      - in: query
+ *        name: offset
+ *        schema:
+ *            type: integer
+ *      - in: query
+ *        name: sort
+ *        schema:
+ *            type: string
+ *            enum: []
+ *      - in: query
+ *        name: order
+ *        schema:
+ *            type: string
+ *            enum: [asc, desc]
+ *            default: asc
  *    responses:
  *        200:
  *          content:
@@ -50,7 +71,13 @@ const router = Router()
 router.route('/')
     .get(userHasPermissions(), async (req: Request, res: Response) => {
         try {
-            const items = await Permissions.find(createFilteredQuery(req.query, req))
+            const { search }: { 
+                search?: Record<string, unknown>,
+            } = req.query
+
+            const queryOptions = createQueryOptions(req.query)
+            
+            const items = await Permissions.find(createFilteredQuery(search as Record<string,unknown>, req), undefined, queryOptions)
             res.json(items)
         } catch (e) {
             res.sendStatus(500)
