@@ -28,12 +28,6 @@ describe('/api/Roles', () => {
             expect(response.body.length).toBe(2)
         })
 
-        it('returns a 500 if the query is malformed', async () => {
-            const response = await superadminAgent
-                .get('/Roles')
-                .query({ _id: 'asdafas' })
-            expect(response.statusCode).toBe(500)
-        })
     })
 
     describe('POST', () => {

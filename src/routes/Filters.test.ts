@@ -33,12 +33,6 @@ describe('/api/Filters', () => {
             expect(response.statusCode).toBe(401)
         })
 
-        it('returns a 500 if the query is malformed', async () => {
-            const response = await superadminAgent
-                .get('/Filters')
-                .query({ _id: 'asdafas' })
-            expect(response.statusCode).toBe(500)
-        })
     })
 
     describe('POST', () => {

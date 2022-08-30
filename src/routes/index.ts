@@ -67,7 +67,9 @@ app.get('/ping', (req: Request, res: Response) => {
     res.sendStatus(status)
 })
 
-app.use(pinoHttp())
+if (config.node_env !== 'test') {
+    app.use(pinoHttp())
+}
 app.use(express.json())
 setupPassport(app)
 
