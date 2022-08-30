@@ -13,17 +13,17 @@ describe('createQueryOptions', () => {
     })
 
     it('converts limit to a number', () => {
-        let returned = createQueryOptions(baseQuery)
+        const returned = createQueryOptions(baseQuery)
         expect(typeof returned.limit).toBe('number')
     })
 
     it('defaults limit to 20', () => {
-        let returned = createQueryOptions({})
+        const returned = createQueryOptions({})
         expect(returned.limit).toBe(20)
     })
 
     it ('adds sort to the response with the correct order', () => {
-        let returned = createQueryOptions(baseQuery)
+        const returned = createQueryOptions(baseQuery)
         if (baseQuery.sort) {
             expect(returned.sort).toEqual({ [baseQuery.sort]: baseQuery.order })
         } else {
@@ -32,7 +32,7 @@ describe('createQueryOptions', () => {
     })
     
     it('defaults sort order to ascending', () => {
-        let returned = createQueryOptions({ sort: 'item' })
+        const returned = createQueryOptions({ sort: 'item' })
         if (baseQuery.sort) {
             expect(returned.sort).toEqual({ [baseQuery.sort]: 'asc' })
         } else {

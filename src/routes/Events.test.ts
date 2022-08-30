@@ -5,7 +5,7 @@ import { getLoggedInSuperAdminAgent } from '../../jest/utilities'
 import { app } from './index'
 import { Events } from '../entities/Events'
 
-const eventData = { name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()}
+const eventData = { name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()}
 
 // suppress error messages
 jest.spyOn(console, 'error')

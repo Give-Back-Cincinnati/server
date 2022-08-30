@@ -1,4 +1,3 @@
-import type { Request } from 'express'
 import { QueryOptions } from 'mongoose'
 
 export type Query = { 
@@ -9,7 +8,7 @@ export type Query = {
 }
 
 export function createQueryOptions (query: Record<string, unknown>): QueryOptions {
-    const { limit = '20', sort, order = 'asc', ...other }: Query = query
+    const { limit = '20', sort, order = 'asc' }: Query = query
 
     const queryOptions: QueryOptions = { limit: parseInt(limit as string) }
 
