@@ -39,9 +39,10 @@ const swaggerUiOptions = {
         tagsSorter: 'alpha'
     }
 }
+
 app.use(cors(config.cors))
 app.get("/docs/swagger.json", (req, res) => res.json(swaggerSpec));
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions))  
 
 app.use(helmet())
 
@@ -59,12 +60,12 @@ app.use(helmet())
  *        description: container is starting/inactive/errored
  */
 app.get('/ping', (req: Request, res: Response) => {
-    const { readyState } = mongoose.connection
-    let status = 503
-    if (readyState) {
-        status = 200
-    }
-    res.sendStatus(status)
+  const { readyState } = mongoose.connection
+  let status = 503
+  if (readyState) {
+    status = 200
+  }
+  res.sendStatus(status)
 })
 
 if (config.node_env !== 'test') {

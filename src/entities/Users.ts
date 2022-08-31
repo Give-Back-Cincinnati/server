@@ -38,6 +38,7 @@ export interface IUser {
  *              email:
  *                  type: string
  *                  example: 'clark@dailyplanet.news'
+ *                  pattern: '^.+\@.+\..{2,}$'
  *              profilePicture:
  *                  type: string
  *                  example: 'https://google.com/test.png'
@@ -50,7 +51,6 @@ export interface IUser {
  *          required:
  *              - firstName
  *              - lastName
- *              - role
  *              - email
  *          properties:
  *              _id:
@@ -73,9 +73,9 @@ export interface IUser {
  *                  $ref: '#/components/schemas/RolesMe'
  */
 export const userSchema = new Schema({
-    firstName: String,
-    lastName: String,
-    email: String,
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, lowercase: true, required: true },
     profilePicture: String,
     googleId: { type: String, select: false },
     role: { type: Schema.Types.ObjectId, ref: 'Roles' },

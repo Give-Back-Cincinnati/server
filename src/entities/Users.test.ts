@@ -7,43 +7,50 @@ describe('User', () => {
     it('creates a User', async () => {
         expect.assertions(2)
 
-        const entity = new Users({})
-        await entity.save()
-
-        const found = await Users.findById(entity._id)
+        const found = await Users.findById(user._id)
         expect(found).toBeDefined()
         expect(found).toHaveProperty('role', role._id)
+    })
+
+    it('saves an email as lowercase', async () => {
+        expect.assertions(1)
+
+        user.email = 'CLARK@notsuperman.com'
+
+        const entity = await user.save()
+
+        expect(entity).toHaveProperty('email', user.email.toLowerCase())
     })
 
     it('saves the password as a hashed value', async () => {
         expect.assertions(1)
         const password = 'password'
-        const entity = new Users({ password })
-        await entity.save()
-        const found = await Users.findById(entity._id)
+        user.password = 'password1'
+        await user.save()
+
+        const found = await Users.findById(user._id)
         expect(found).toHaveProperty('password', expect.not.stringContaining(password))
     })
 
     it('saves the updated password as a hashed value', async () => {
         expect.assertions(2)
         const password = 'password'
-        const entity = new Users({ password })
-        await entity.save()
-        const found = await Users.findById(entity._id)
+
+        await user.save()
+        const found = await Users.findById(user._id)
         expect(found).toHaveProperty('password', expect.not.stringContaining(password))
 
-        entity.password = 'password2'
-        await entity.save()
+        user.password = 'password2'
+        await user.save()
 
-        const found2 = await Users.findById(entity._id)
+        const found2 = await Users.findById(user._id)
         expect(found2).toHaveProperty('password', expect.not.stringContaining(found?.password || ''))
     })
 
     it('updates a User', async () => {
         expect.assertions(2)
 
-        const entity = await new Users({})
-            .save()
+        const entity = await user.save()
         expect(entity).toBeDefined()
 
         await Users.updateOne({ _id: entity._id }, { firstName: 'updated' })
@@ -54,7 +61,7 @@ describe('User', () => {
     it('deletes a User', async () => {
         expect.assertions(2)
 
-        const entity = await new Users({})
+        const entity = await new Users({ firstName: 'Lois', lastName: 'Lane', email: 'Lois@dailyplanet.com' })
             .save()
         expect(entity).toBeDefined()
 
@@ -81,6 +88,10 @@ describe('User', () => {
     describe('comparePassword', () => {
 
         it('returns User if the passwords match', async () => {
+            // reset the user's password to default value
+            user.password = password
+            await user.save()
+
             const result = await Users.authenticate(user.email, password)
             expect(result).toEqual(expect.any(Users))
             expect(result).toHaveProperty('_id', user._id)

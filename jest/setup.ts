@@ -2,15 +2,15 @@ const mongoose = require('mongoose')
 import { HydratedDocument } from 'mongoose'
 import { IPermissions } from '../src/entities/Permissions'
 import { collectPermissions } from '../utils/permissions/collectPermissions'
-const { registrations } = require('../src/entities/registrations')
+const { Registrations } = require('../src/entities/Registrations')
 const { Events } = require('../src/entities/Events')
 const { Filters } = require('../src/entities/Filters')
 const { Users } = require('../src/entities/Users')
 const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
-export const registration = new registrations({})
-export const event = new Events({ name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()})
+export const Registration = new Registrations({})
+export const event = new Events({ name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()})
 export const filter = new Filters({ name: 'Users', filter: { firstName: 'hello' } })
 export const role = new Roles({ name: 'USER', permissions: [], filters: [filter] })
 export const password = 'password'
@@ -41,7 +41,7 @@ beforeAll(async () => {
     }
 
     allPermissions = await collectPermissions()
-	await registration.save()
+	await Registration.save()
 	await event.save()
 	await filter.save()
     await Promise.all(allPermissions.map(permission => permission.save()))
@@ -63,7 +63,7 @@ afterEach(async () => {
     if (mongoose.connection.readyState !== 1) {
         await mongoose.connect(global.__MONGO_URI__)
     }
-	await registrations.deleteMany({ _id: { $nin: [registration._id] } })
+	await Registrations.deleteMany({ _id: { $nin: [Registration._id] } })
 	await Events.deleteMany({ _id: { $nin: [event._id] } })
 	await Filters.deleteMany({ _id: { $nin: [filter._id] } })
     await Users.deleteMany({ _id: { $nin: [user._id, superadmin._id] } })
@@ -87,6 +87,6 @@ afterAll(async () => {
     await Permissions.deleteMany({})
 	await Filters.deleteMany({})
 	await Events.deleteMany({})
-	await registrations.deleteMany({})
+	await Registrations.deleteMany({})
     await mongoose.disconnect()
 })

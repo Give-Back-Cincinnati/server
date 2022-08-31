@@ -55,7 +55,7 @@ export interface IEvents {
 export const eventsSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: String, required: true, enum: ['Hands-On', 'Social', 'Interactive', 'Civic Engagement', 'New Member', 'Cincy YP', 'Leadership', 'Fall Feast', 'Paint the Town', 'Give Back Beyond Cincinnati'] },
     address: { type: String, required: true },
     location: {
         type: {

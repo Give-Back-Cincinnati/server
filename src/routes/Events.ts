@@ -1,6 +1,7 @@
 import { logger } from '../config/index'
 import { Router, Response, Request } from 'express'
 import { Events } from '../entities/Events'
+import { Registrations } from '../entities/Registrations'
 import { userHasPermissions } from './auth/middleware'
 import { createFilteredQuery, createQueryOptions } from '../entities/queryUtils'
 
