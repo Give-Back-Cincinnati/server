@@ -35,6 +35,11 @@ describe('createFilteredQuery', () => {
         expect(createFilteredQuery(query, reqBase as Partial<Request> as Request)).toBe(query)
     })
 
+    it('returns a sanitized object if no user is present', () => {
+        const query = { name: undefined }
+        expect(createFilteredQuery(query, reqBase as Partial<Request> as Request)).not.toHaveProperty('name')
+    })
+
     it('returns the same object if no filter is present on the user', () => {
         const query = { name: 'Superman' }
         expect(JSON.stringify(createFilteredQuery(query, userReq as Request))).toBe(JSON.stringify(query))
