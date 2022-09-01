@@ -1,49 +1,103 @@
 import { Schema, model, Types } from 'mongoose'
+import { IUser } from './Users'
 
 export interface IRegistrations {
     _id: Types.ObjectId,
     event: Types.ObjectId,
-    firstName: string,
-    lastName: string,
-    email: string,
     phone: string,
     dateOfBirth: Date,
     hasAgreedToTerms: boolean,
-    checkedIn: boolean
+    checkedIn: boolean,
+}
+
+export interface IUserRegistration extends IRegistrations {
+    user: IUser | Types.ObjectId
+}
+
+export interface IGuestRegistration extends IRegistrations {
+    firstName: string,
+    lastName: string,
+    email: string,
 }
 
 /**
  * @openapi
  * components:
  *  schemas:
- *      registrations:
+ *      BasicRegistration:
  *          type: object
  *          required:
- *              - event
- *              - 
+ *              - phone
+ *              - dateOfBirth
+ *              - hasAgreedToTerms
  *          properties:
- *              _id: 
+ *              phone:
  *                  type: string
- *                  example: '627afea4acf098768c92b855'
- *              event:
+ *                  example: '513-555-1234'
+ *              dateOfBirth:
  *                  type: string
- *                  example: '627afea4acf098768c92b785'
- *              email:
- *                  type: string
- *                  example: 'clark@dailyplanet.com'
- *                  pattern: '^.+\@.+\..{2,}$'
+ *                  format: date-time
+ *              hasAgreedToTerms:
+ *                  type: boolean
+ *                  default: false
+ *              checkedIn:
+ *                  type: boolean
+ *                  default: false
+ *      UserRegistration:
+ *          allOf:
+ *              - $ref: '#/components/schemas/BasicRegistration'
+ *              - type: object
+ *                properties:
+ *                    user:
+ *                      oneOf:
+ *                        - $ref: '#/components/schemas/Users'
+ *                        - type: string
+ *      GuestRegistration:
+ *          allOf:
+ *              - type: object
+ *                required:
+ *                      - event
+ *                      - firstName
+ *                      - lastName
+ *                      - email
+ *                      - phone
+ *                      - dateOfBirth
+ *                      - hasAgreedToTerms
+ *                properties:
+ *                      firstName:
+ *                          type: string
+ *                          example: 'Clark'
+ *                      lastName:
+ *                          type: string
+ *                          example: 'Kent'
+ *                      email:
+ *                          type: string
+ *                          example: 'clark@dailyplanet.com'
+ *                          pattern: '^.+\@.+\..{2,}$'
+ *              - $ref: '#/components/schemas/BasicRegistration'
  */
-export const registrationsSchema = new Schema({
-    event: { type: Schema.Types.ObjectId, ref: 'Events' },
-    firstName: String,
-    lastName: String,
-    email: { type: String, match: /^.+\@.+\..{2,}$/i },
-    phone: String,
-    dateOfBirth: Date,
-    hasAgreedToTerms: Boolean,
+
+// Base schema for registrations
+const registrationsSchema = new Schema({
+    event: { type: Schema.Types.ObjectId, ref: 'Events', required: true, index: true },
+    phone: { type: String, required: true },
+    dateOfBirth: { type: Date, required: true },
+    hasAgreedToTerms: { type: Boolean, default: false },
     checkedIn: { type: Boolean, default: false }
 }, { timestamps: true })
 
-
-
 export const Registrations = model<IRegistrations>('Registrations', registrationsSchema)
+
+// For users that are authenticated
+export const userRegistrationSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'Users', required: true }
+})
+export const UserRegistration = Registrations.discriminator<IUserRegistration>('UserRegistration', userRegistrationSchema)
+
+// For guests to the site, e.g. someone who doesn't have an account
+export const guestRegistrationSchema = new Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, match: /^.+\@.+\..{2,}$/i, lowercase: true, required: true },
+})
+export const GuestRegistration = Registrations.discriminator<IGuestRegistration>('GuestRegistration', guestRegistrationSchema)

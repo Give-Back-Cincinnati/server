@@ -51,4 +51,31 @@ describe('createFilteredQuery', () => {
         expect(returnedQuery).toHaveProperty(filterKey, filter.filter[filterKey])
     })
 
+    it('return the filter if query is undefined', () => {
+        userReq.user as SerializedUser
+        const returnedQuery = createFilteredQuery(undefined, ({...userReq, baseUrl: `/${filter.name}` }) as Request)
+
+        const filterKey = Object.keys(filter.filter)[0]
+
+        expect(returnedQuery).toHaveProperty(filterKey, filter.filter[filterKey])
+    })
+
+    it('returns an empty object if no query and no hashFilter', () => {
+        userReq.user as SerializedUser
+        const returnedQuery = createFilteredQuery(undefined, ({...userReq, baseUrl: `/asd` }) as Request)
+
+        expect(returnedQuery).toEqual({})
+    })
+
+    it('removes undefined values from the query', () => {
+        const query = { name: undefined }
+        userReq.user as SerializedUser
+        const returnedQuery = createFilteredQuery(query, ({...userReq, baseUrl: `/${filter.name}` }) as Request)
+
+        const filterKey = Object.keys(filter.filter)[0]
+
+        expect(returnedQuery).not.toHaveProperty('name')
+        expect(returnedQuery).toHaveProperty(filterKey, filter.filter[filterKey])
+    })
+
 })

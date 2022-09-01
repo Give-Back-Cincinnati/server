@@ -18,6 +18,9 @@ export interface IEvents {
  * @openapi
  * components:
  *  schemas:
+ *      EventCategories:
+ *          type: string
+ *          enum: ['Hands-On', 'Social', 'Interactive', 'Civic Engagement', 'New Member', 'Cincy YP', 'Leadership', 'Fall Feast', 'Paint the Town', 'Give Back Beyond Cincinnati']
  *      Events:
  *          type: object
  *          required:
@@ -39,9 +42,8 @@ export interface IEvents {
  *                  example: 'This is a longer description of an event...'
  *                  maxLength: 1000
  *              category:
- *                  type: string
- *                  enum: ['Hands-On', 'Social', 'Interactive', 'Civic Engagement', 'New Member', 'Cincy YP', 'Leadership', 'Fall Feast', 'Paint the Town', 'Give Back Beyond Cincinnati']
- *                  example: 'Hands-On'
+ *                  schema:
+ *                      $ref: '#/components/schemas/EventCategories'
  *              address:
  *                  type: string
  *                  example: '312 Walnut St. Cincinnati OH 45202'

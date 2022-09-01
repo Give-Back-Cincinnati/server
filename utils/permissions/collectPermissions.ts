@@ -18,7 +18,6 @@ export async function collectPermissions (): Promise<HydratedDocument<IPermissio
                 import(path.resolve(__dirname, `../../src/routes/${module}`))
                     .then(router => {
                         let moduleCommonName = module.replace('.ts', '').toLowerCase()
-        
                         router.default.stack.forEach((layer: {
                             route: {
                                 path: string,

@@ -2,15 +2,15 @@ const mongoose = require('mongoose')
 import { HydratedDocument } from 'mongoose'
 import { IPermissions } from '../src/entities/Permissions'
 import { collectPermissions } from '../utils/permissions/collectPermissions'
-const { Registrations } = require('../src/entities/Registrations')
+const { Registrations, GuestRegistration } = require('../src/entities/Registrations')
 const { Events } = require('../src/entities/Events')
 const { Filters } = require('../src/entities/Filters')
 const { Users } = require('../src/entities/Users')
 const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
-export const Registration = new Registrations({})
-export const event = new Events({ name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()})
+export const event = new Events({ name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date() })
+export const guestRegistration = new GuestRegistration({ event, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234' })
 export const filter = new Filters({ name: 'Users', filter: { firstName: 'hello' } })
 export const role = new Roles({ name: 'USER', permissions: [], filters: [filter] })
 export const password = 'password'
@@ -41,8 +41,8 @@ beforeAll(async () => {
     }
 
     allPermissions = await collectPermissions()
-	await Registration.save()
 	await event.save()
+	await guestRegistration.save()
 	await filter.save()
     await Promise.all(allPermissions.map(permission => permission.save()))
 
@@ -63,7 +63,7 @@ afterEach(async () => {
     if (mongoose.connection.readyState !== 1) {
         await mongoose.connect(global.__MONGO_URI__)
     }
-	await Registrations.deleteMany({ _id: { $nin: [Registration._id] } })
+	await Registrations.deleteMany({ _id: { $nin: [guestRegistration._id] } })
 	await Events.deleteMany({ _id: { $nin: [event._id] } })
 	await Filters.deleteMany({ _id: { $nin: [filter._id] } })
     await Users.deleteMany({ _id: { $nin: [user._id, superadmin._id] } })

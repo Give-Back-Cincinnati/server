@@ -1,9 +1,10 @@
-import { logger } from '../config/index'
+import { logger } from '../../config/index'
 import { Router, Response, Request } from 'express'
-import { Events } from '../entities/Events'
-import { Registrations } from '../entities/Registrations'
-import { userHasPermissions } from './auth/middleware'
-import { createFilteredQuery, createQueryOptions } from '../entities/queryUtils'
+import { Events } from '../../entities/Events'
+import { userHasPermissions } from '../auth/middleware'
+import { createFilteredQuery, createQueryOptions } from '../../entities/queryUtils'
+
+import { getRegistrations, createRegistration, deleteRegistration } from './Register'
 
 /**
  * @openapi
@@ -42,6 +43,23 @@ const router = Router()
  *            type: string
  *            enum: [asc, desc]
  *            default: asc
+ *      - in: query
+ *        name: name
+ *        type: string
+ *      - in: query
+ *        name: category
+ *        schema:
+ *          $ref: '#/components/schemas/EventCategories'
+ *      - in: query
+ *        name: startTime
+ *        schema:
+ *          type: string
+ *          format: date-time
+ *      - in: query
+ *        name: endTime
+ *        schema:
+ *          type: string
+ *          format: date-time
  *    responses:
  *        200:
  *          content:
@@ -71,13 +89,20 @@ const router = Router()
 router.route('/')
     .get(userHasPermissions('public'), async (req: Request, res: Response) => {
         try {
-            const { search }: { 
-                search?: Record<string, unknown>,
+            const { name, category, startTime, endTime }: { 
+                name?: string,
+                category?: string,
+                startTime?: string,
+                endTime?: string
             } = req.query
+
+            const searchFor = {
+                name, category, startTime, endTime
+            }
 
             const queryOptions = createQueryOptions(req.query)
             
-            const items = await Events.find(createFilteredQuery(search as Record<string,unknown>, req), undefined, queryOptions)
+            const items = await Events.find(createFilteredQuery(searchFor, req), undefined, queryOptions)
             return res.json(items)
         } catch (e) {
             res.sendStatus(500)
@@ -193,5 +218,13 @@ router.route('/:id')
             logger.error(e)
         }
     })
+
+
+router.route('/:eventId/register')
+    .get(userHasPermissions(), getRegistrations)
+    .post(userHasPermissions('public'), createRegistration)
+
+router.route('/:eventId/register/:registrationId')
+    .delete(userHasPermissions(), deleteRegistration)
 
 export default router
