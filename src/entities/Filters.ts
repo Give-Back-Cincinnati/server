@@ -18,6 +18,7 @@ export interface IFilters {
  *              _id: 
  *                  type: string
  *                  example: '627afea4acf098768c92b855'
+ *                  readonly: true
  *              name:
  *                  type: string
  *                  example: 'Filters'

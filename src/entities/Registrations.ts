@@ -31,6 +31,10 @@ export interface IGuestRegistration extends IRegistrations {
  *              - dateOfBirth
  *              - hasAgreedToTerms
  *          properties:
+ *              _id:
+ *                  type: string
+ *                  example: '627afea4acf098768c92b855'
+ *                  readonly: true
  *              phone:
  *                  type: string
  *                  example: '513-555-1234'
@@ -40,9 +44,11 @@ export interface IGuestRegistration extends IRegistrations {
  *              hasAgreedToTerms:
  *                  type: boolean
  *                  default: false
+ *                  name: I have read and agree to the terms and conditions
  *              checkedIn:
  *                  type: boolean
  *                  default: false
+ *                  readonly: true
  *      UserRegistration:
  *          allOf:
  *              - $ref: '#/components/schemas/BasicRegistration'

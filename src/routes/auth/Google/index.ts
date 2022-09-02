@@ -31,7 +31,7 @@ router.get('/callback',
         passport.authenticate(googleStrategy)(req, res, next)
     },
     (req, res) => {
-    res.sendStatus(204)
-})
+        res.sendStatus(204)
+    })
 
 export default router

@@ -29,6 +29,7 @@ export interface IUser {
  *              _id:
  *                  type: string
  *                  example: '627afea4acf098768c92b855'
+ *                  readonly: true
  *              firstName:
  *                  type: string
  *                  example: 'Clark'
