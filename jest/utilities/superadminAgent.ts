@@ -4,7 +4,7 @@ import Express from 'express'
 
 export async function getLoggedInSuperAdminAgent (app: Express.Application): Promise<request.SuperAgentTest> {
     const agent = request.agent(app) 
-    await agent
+    const res = await agent
         .post('/auth/login')
         .send(
             {
@@ -12,5 +12,9 @@ export async function getLoggedInSuperAdminAgent (app: Express.Application): Pro
                 password: superadminPassword
             }
         )
+    if(res.statusCode !== 204) {
+        console.log(res.text)
+        throw new Error(`SuperAdmin Login Failed With Status: ${res.statusCode}`)
+    }
     return agent 
 }

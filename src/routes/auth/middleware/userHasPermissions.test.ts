@@ -4,6 +4,7 @@ import { Users } from "../../../entities/Users"
 import { Permissions } from "../../../entities/Permissions"
 import { Serialization } from "../serialization"
 import { user, superadmin, role } from '../../../../jest/setup'
+import { Roles } from '../../../entities/Roles'
 
 const nextMock = jest.fn()
 const isAuthenticated = jest.fn()
@@ -58,8 +59,10 @@ describe('userHasPermissions', () => {
 
         // add this permission to the user's role
         const userGetPerm = await new Permissions({ name: 'users.get' }).save()
-        role.permissions = [...role.permissions, userGetPerm]
-        await role.save()
+        const foundRole = await Roles.findById(role._id)
+        if (!foundRole) return
+        foundRole.permissions = [...role.permissions, userGetPerm]
+        await foundRole.save()
 
         isAuthenticated.mockImplementationOnce(() => true)
         await Serialization.deserialize(user._id, (err, serializedUser) => {

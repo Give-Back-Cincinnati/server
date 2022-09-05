@@ -103,7 +103,6 @@ export const createRegistration = async (req: Request, res: Response) => {
             }
             res.sendStatus(201)
         } catch (e) {
-            console.log(e)
             res.sendStatus(500)
             logger.error(e)
         }

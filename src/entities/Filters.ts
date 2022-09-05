@@ -24,7 +24,7 @@ export interface IFilters {
  *                  example: 'Filters'
  */
 export const filtersSchema = new Schema({
-    name: String,
+    name: { type: String, lowercase: true },
     filter: Object
 }, { timestamps: true })
 

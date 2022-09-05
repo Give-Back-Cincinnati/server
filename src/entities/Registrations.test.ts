@@ -5,8 +5,9 @@ describe('registrations', () => {
 
     it('creates a registrations', async () => {
         expect.assertions(2)
+        await Registrations.deleteMany({})
         
-        const entity = await guestRegistration
+        const entity = await new GuestRegistration(guestRegistration)
             .save()
         expect(entity).toBeDefined()
 
@@ -15,24 +16,22 @@ describe('registrations', () => {
     })
 
     it('updates a registrations', async () => {
-        expect.assertions(2)
-        guestRegistration.firstName = 'Billy'
-        
-        const entity = await guestRegistration
-            .save()
-        expect(entity).toBeDefined()
+        expect.assertions(1)
 
-        await Registrations.updateOne({ _id: entity._id }, { firstName: guestRegistration.firstName })
+        const entity = await GuestRegistration.findById(guestRegistration._id)
+        if (!entity) return
+        entity.firstName = 'Billy'
+        await entity.save()
+
         const found = await GuestRegistration.findById(entity._id)
-        expect(found?.firstName).toEqual(guestRegistration.firstName)
+        expect(found?.firstName).toEqual(entity.firstName)
     })
 
     it('deletes a registrations', async () => {
-        expect.assertions(2)
+        expect.assertions(1)
         
-        const entity = await guestRegistration
-            .save()
-        expect(entity).toBeDefined()
+        const entity = await GuestRegistration.findById(guestRegistration._id)
+        if (!entity) return
 
         await Registrations.deleteOne({ _id: entity._id })
         const found = await Registrations.findById(entity._id)
