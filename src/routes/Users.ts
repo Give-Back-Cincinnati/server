@@ -34,7 +34,7 @@ const router = Router()
  *        name: sort
  *        schema:
  *            type: string
- *            enum: []
+ *            enum: [firstName, lastName, email, role]
  *      - in: query
  *        name: order
  *        schema:
@@ -195,16 +195,13 @@ router.route('/:id')
     })
     .patch(userHasPermissions(), async (req: Request, res: Response) => {
         try {
-            const item = await Users.findOneAndUpdate(
-                createFilteredQuery({ _id: req.params.id }, req),
-                req.body,
-                { new: true }
-            )
-            if (item) {
-                res.json(item)
-                return
-            }
-            res.sendStatus(404)
+            const item = await Users.findOne(createFilteredQuery({ _id: req.params.id }, req))
+            if (!item) return res.sendStatus(404)
+            item.set(req.body)
+            
+            await item.save()
+
+            return res.json(item)
         } catch (e) {
             res.sendStatus(500)
             logger.error(e)
