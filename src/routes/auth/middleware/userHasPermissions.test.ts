@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import userHasPermissions from './userHasPermissions'
 import { Users } from "../../../entities/Users"
 import { Permissions } from "../../../entities/Permissions"
+import { Roles } from '../../../entities/Roles'
 import { Serialization } from "../serialization"
 import { user, superadmin, role } from '../../../../jest/setup'
 
@@ -56,10 +57,13 @@ describe('userHasPermissions', () => {
     it('path is removed if empty', async () => {
         expect.assertions(1)
 
+        const tmpRole = await Roles.findById(role._id)
+        if (!tmpRole)return;
+
         // add this permission to the user's role
         const userGetPerm = await new Permissions({ name: 'users.get' }).save()
-        role.permissions = [...role.permissions, userGetPerm]
-        await role.save()
+        tmpRole.permissions = [...role.permissions, userGetPerm]
+        await tmpRole.save()
 
         isAuthenticated.mockImplementationOnce(() => true)
         await Serialization.deserialize(user._id, (err, serializedUser) => {

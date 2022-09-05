@@ -14,7 +14,7 @@ jest.spyOn(console, 'error')
 describe('/api/Events', () => {
     let superadminAgent: request.SuperAgentTest
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         superadminAgent = await getLoggedInSuperAdminAgent(app)
     })
 
@@ -38,7 +38,11 @@ describe('/api/Events', () => {
     })
 
     describe('POST', () => {
-            
+
+        beforeEach(async () => {
+            await Events.deleteMany({})
+        })
+
         it('returns a 201', async () => {
             const response = await superadminAgent.post('/Events').send(eventData)
             expect(response.statusCode).toBe(201)

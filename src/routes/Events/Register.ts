@@ -32,7 +32,7 @@ import { IUser } from 'entities/Users'
  *            name: sort
  *            schema:
  *                type: string
- *                enum: [name, category, startTime, endTime]
+ *                enum: [firstName, lastName]
  *          - in: query
  *            name: order
  *            schema:

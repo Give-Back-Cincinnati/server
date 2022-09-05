@@ -7,7 +7,7 @@ describe('Events', () => {
     it('creates an Event', async () => {
         expect.assertions(2)
         
-        const entity = await new Events(eventData)
+        const entity = await new Events({...eventData, name: 'is not used elsewhere'})
             .save()
         expect(entity).toBeDefined()
 
@@ -18,7 +18,7 @@ describe('Events', () => {
     it('updates an Event', async () => {
         expect.assertions(2)
         
-        const entity = await new Events(eventData)
+        const entity = await new Events({...eventData, name: 'is not updated'})
             .save()
         expect(entity).toBeDefined()
 
@@ -30,7 +30,7 @@ describe('Events', () => {
     it('deletes an Event', async () => {
         expect.assertions(2)
         
-        const entity = await new Events(eventData)
+        const entity = await new Events({...eventData, name: 'Random Name'})
             .save()
         expect(entity).toBeDefined()
 

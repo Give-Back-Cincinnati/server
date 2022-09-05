@@ -6,7 +6,7 @@ import { Serialization, SerializedUser } from '../../routes/auth/serialization'
 describe('createFilteredQuery', () => {
     let userReq: Partial<Request>
     let reqBase: Record<string, unknown>
-    beforeAll(async () => {
+    beforeEach(async () => {
         reqBase = {
             baseUrl: '/Permissions',
             route: {

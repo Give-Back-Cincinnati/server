@@ -4,38 +4,31 @@ import { guestRegistration } from '../../jest/setup'
 describe('registrations', () => {
 
     it('creates a registrations', async () => {
-        expect.assertions(2)
-        
-        const entity = await guestRegistration
-            .save()
-        expect(entity).toBeDefined()
+        expect.assertions(1)
 
-        const found = await Registrations.findById(entity._id)
+        const found = await Registrations.findById(guestRegistration._id)
         expect(found).toBeDefined()
     })
 
     it('updates a registrations', async () => {
-        expect.assertions(2)
-        guestRegistration.firstName = 'Billy'
-        
-        const entity = await guestRegistration
-            .save()
-        expect(entity).toBeDefined()
+        expect.assertions(1)
+        const tmpGuestRegistration = await GuestRegistration.findById(guestRegistration._id)
+        if (!tmpGuestRegistration)return;
 
-        await Registrations.updateOne({ _id: entity._id }, { firstName: guestRegistration.firstName })
-        const found = await GuestRegistration.findById(entity._id)
-        expect(found?.firstName).toEqual(guestRegistration.firstName)
+        tmpGuestRegistration.firstName = 'Billy'
+        await tmpGuestRegistration.save()
+
+        await Registrations.updateOne({ _id: guestRegistration._id }, { firstName: tmpGuestRegistration.firstName })
+        const found = await GuestRegistration.findById(guestRegistration._id)
+        expect(found?.firstName).toEqual(tmpGuestRegistration.firstName)
     })
 
     it('deletes a registrations', async () => {
-        expect.assertions(2)
-        
-        const entity = await guestRegistration
-            .save()
-        expect(entity).toBeDefined()
+        expect.assertions(1)
 
-        await Registrations.deleteOne({ _id: entity._id })
-        const found = await Registrations.findById(entity._id)
+
+        await Registrations.deleteOne({ _id: guestRegistration._id })
+        const found = await Registrations.findById(guestRegistration._id)
         expect(found).toBeNull()
     })
 })

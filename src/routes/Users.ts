@@ -34,7 +34,7 @@ const router = Router()
  *        name: sort
  *        schema:
  *            type: string
- *            enum: []
+ *            enum: [firstName, lastName, email]
  *      - in: query
  *        name: order
  *        schema:

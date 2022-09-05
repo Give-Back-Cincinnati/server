@@ -8,13 +8,13 @@ import { Events } from '../../entities/Events'
 describe('/api/Events/:id/register', () => {
     let superadminAgent: request.SuperAgentTest
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         superadminAgent = await getLoggedInSuperAdminAgent(app)
     })
 
     describe('/', () => {
 
-        const registrationData = JSON.parse(JSON.stringify(guestRegistration._doc))
+        const registrationData = JSON.parse(JSON.stringify(guestRegistration))
         delete registrationData._id
         delete registrationData.event
 
@@ -27,8 +27,10 @@ describe('/api/Events/:id/register', () => {
             })
 
             it('responds with an empty array to an unknown event id', async () => {
-                expect.assertions(1)
+                expect.assertions(2)
                 const response = await superadminAgent.get(`/Events/aRandomNotId/register`)
+
+                expect(response.statusCode).toBe(200)
                 expect(response.body.length).toBe(0)
             })
 
