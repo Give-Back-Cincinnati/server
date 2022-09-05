@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose'
+import mongoose from 'mongoose'
 import request from 'supertest'
 import { event as item } from '../../../jest/setup'
 import { getLoggedInSuperAdminAgent } from '../../../jest/utilities'

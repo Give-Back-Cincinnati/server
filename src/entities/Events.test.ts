@@ -1,8 +1,6 @@
 import { Events } from './Events'
 import { event } from '../../jest/setup'
 
-const eventData = { name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date() }
-
 describe('Events', () => {
 
     it('creates an Event', async () => {

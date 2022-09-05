@@ -104,6 +104,6 @@ export const UserRegistration = Registrations.discriminator<IUserRegistration>('
 export const guestRegistrationSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, match: /^.+\@.+\..{2,}$/i, lowercase: true, required: true },
+    email: { type: String, match: /^.+@.+\..{2,}$/i, lowercase: true, required: true },
 })
 export const GuestRegistration = Registrations.discriminator<IGuestRegistration>('GuestRegistration', guestRegistrationSchema)

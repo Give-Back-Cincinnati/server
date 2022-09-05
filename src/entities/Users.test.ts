@@ -1,6 +1,6 @@
 import { Users } from './Users'
 import { Permissions } from './Permissions'
-import { role, user, superadmin, password } from '../../jest/setup'
+import { role, user, password } from '../../jest/setup'
 
 describe('User', () => {
 
