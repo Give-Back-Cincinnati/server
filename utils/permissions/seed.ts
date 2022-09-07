@@ -11,7 +11,7 @@ async function seedPermissions () {
     try {
         await establishMongooseConnection()
     } catch (e: any) {
-        console.error(e?.message)
+        console.log(e?.message)
         process.exit(1)
     }
 
