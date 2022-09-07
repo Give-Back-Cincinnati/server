@@ -154,6 +154,18 @@ router.route('/me')
  *      summary: Update a single user record
  *      description: Update a single users record
  *      operationId: updateUser
+ *      requestBody:
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      allOf:
+ *                      - $ref: '#/components/schemas/Users'
+ *                      - type: object
+ *                        properties:
+ *                          profilePicture:
+ *                              nullable: true
+ *                          role:
+ *                              nullable: true
  *      responses:
  *          200:
  *              description: Success

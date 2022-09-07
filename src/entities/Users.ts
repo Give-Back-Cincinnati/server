@@ -48,30 +48,12 @@ export interface IUser {
  *                  example: '627afea4acf098768c92b855'
  *      UsersMe:
  *          description: User object returned from Users.findByIdWithPermissions
- *          type: object
- *          required:
- *              - firstName
- *              - lastName
- *              - email
- *          properties:
- *              _id:
- *                  type: string
- *                  example: '627afea4acf098768c92b855'
- *              firstName:
- *                  type: string
- *                  example: 'Clark'
- *              lastName:
- *                  type: string
- *                  example: 'Kent'
- *              email:
- *                  type: string
- *                  example: 'clark@dailyplanet.news'
- *                  pattern: '^.+\@.+\..{2,}$'
- *              profilePicture:
- *                  type: string
- *                  example: 'https://google.com/test.png'
- *              role:
- *                  $ref: '#/components/schemas/RolesMe'
+ *          allOf:
+ *              - $ref: '#/components/schemas/Users'            
+ *              - type: object
+ *                properties:
+ *                  role:
+ *                      $ref: '#/components/schemas/RolesMe'
  */
 export const userSchema = new Schema({
     firstName: { type: String, required: true },
