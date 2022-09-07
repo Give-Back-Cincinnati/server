@@ -149,6 +149,11 @@ router.route('/')
  *      operationId: updateEvents
  *      summary: Update a single Events record
  *      description: Update a single Events record
+ *      requestBody:
+ *          content:
+ *              application/json:
+ *                  schema: 
+ *                      $ref: '#/components/schemas/Events'
  *      responses:
  *          200:
  *              description: Success
@@ -190,16 +195,13 @@ router.route('/:id')
     })
     .patch(userHasPermissions(), async (req: Request, res: Response) => {
         try {
-            const item = await Events.findOneAndUpdate(
-                createFilteredQuery({ _id: req.params.id }, req),
-                req.body,
-                { new: true }
-            )
-            if (item) {
-                res.json(item)
-                return
-            }
-            res.sendStatus(404)
+            const item = await Events.findOne(createFilteredQuery({ _id: req.params.id }, req))
+            if (!item) return res.sendStatus(404)
+
+            item.set(req.body)
+            await item.save()
+
+            res.json(item)
         } catch (e) {
             res.sendStatus(500)
             logger.error(e)
