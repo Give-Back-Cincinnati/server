@@ -14,9 +14,9 @@
         "start": "yarn ts-node src/app.ts",
         "lint": "yarn eslint --ext .ts ./src",
         "lint-fix": "yarn eslint --ext .ts ./src --fix",
-        "permissions:seed": "yarn ts-node utils/permissions/seed.ts",
-        "user:setRole": "yarn ts-node utils/setUserRole.ts",
-        "healthcheck": "yarn ts-node docker/docker-healthcheck.mjs"
+        "permissions:seed": "yarn ts-node --transpile-only utils/permissions/seed.ts",
+        "user:setRole": "yarn ts-node --transpile-only utils/setUserRole.ts",
+        "healthcheck": "yarn ts-node --transpile-only docker/docker-healthcheck.mjs"
     },
     "dependencies": {
         "axios": "^0.26.1",
