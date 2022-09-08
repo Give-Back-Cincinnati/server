@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express'
 import pinoHttp from 'pino-http'
 import { config } from '../config'
 import { setupPassport } from "./auth"
+import Registrations from './Registrations'
 import Events from './Events'
 import Filters from './Filters'
 import Permissions from './Permissions'
@@ -80,3 +81,4 @@ app.use('/permissions', Permissions)
 app.use('/roles', Roles)
 app.use('/users', Users)
 app.use('/auth', auth)
+app.use('/registrations', Registrations)

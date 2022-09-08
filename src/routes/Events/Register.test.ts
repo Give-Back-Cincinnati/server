@@ -5,6 +5,10 @@ import { app } from '../index'
 import { GuestRegistration, Registrations, UserRegistration } from '../../entities/Registrations'
 import { Events } from '../../entities/Events'
 
+// suppress error messages
+jest.spyOn(console, 'error')
+    .mockImplementation(() => ({}))
+
 describe('/api/Events/:id/register', () => {
     let superadminAgent: request.SuperAgentTest
 
@@ -80,6 +84,36 @@ describe('/api/Events/:id/register', () => {
     })
 
     describe('/:registrationId', () => {
+
+        describe('PATCH', () => {
+
+            it('returns a 200', async () => {
+                const response = await superadminAgent.patch(`/Events/${item._id}/register/${guestRegistration._id}`).send({ firstName: 'Events' })
+                expect(response.statusCode).toBe(200)
+            })
+
+            it('returns the updated Events', async () => {
+                const response = await superadminAgent.patch(`/Events/${item._id}/register/${guestRegistration._id}`).send({ firstName: 'Superman' })
+                expect(response.body).toHaveProperty('firstName', 'Superman')
+            })
+
+            it('returns a 404', async () => {
+                const response = await superadminAgent.patch(`/Events/${item._id}/register/${item._id}`).send({ firstName: 'Events' })
+                expect(response.statusCode).toBe(404)
+            })
+
+            it('sends a 500 if a cast error occurs on _id', async () => {
+                const response = await superadminAgent.patch(`/Events/${item._id}/register/guestRegistration._id`).send({ firstName: 'Events' })
+                expect(response.statusCode).toBe(500)
+            })
+
+            it('returns a 401 for a user without permissions', async () => {
+                const response = await request(app).patch(`/Events/${item._id}/register/${guestRegistration._id}`).send({ firstName: 'Events' })
+                expect(response.statusCode).toBe(401)
+            })
+
+        })
+
         describe('DELETE', () => {
             it('cannot be deleted by an unauthenticated user', async () => {
                 expect.assertions(1)

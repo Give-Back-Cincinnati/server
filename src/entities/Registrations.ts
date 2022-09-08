@@ -53,6 +53,8 @@ export interface IGuestRegistration extends IRegistrations {
  *          allOf:
  *              - $ref: '#/components/schemas/BasicRegistration'
  *              - type: object
+ *                required:
+ *                  - hasAgreedToTerms
  *                properties:
  *                    user:
  *                      oneOf:
@@ -62,7 +64,6 @@ export interface IGuestRegistration extends IRegistrations {
  *          allOf:
  *              - type: object
  *                required:
- *                      - event
  *                      - firstName
  *                      - lastName
  *                      - email

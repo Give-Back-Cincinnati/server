@@ -4,7 +4,7 @@ import { Events } from '../../entities/Events'
 import { userHasPermissions } from '../auth/middleware'
 import { createFilteredQuery, createQueryOptions } from '../../entities/queryUtils'
 
-import { getRegistrations, createRegistration, deleteRegistration } from './Register'
+import { getRegistrations, createRegistration, updateRegistration, deleteRegistration } from './Register'
 
 /**
  * @openapi
@@ -227,6 +227,7 @@ router.route('/:eventId/register')
     .post(userHasPermissions('public'), createRegistration)
 
 router.route('/:eventId/register/:registrationId')
+    .patch(userHasPermissions(), updateRegistration)
     .delete(userHasPermissions(), deleteRegistration)
 
 export default router
