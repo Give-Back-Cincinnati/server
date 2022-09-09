@@ -27,6 +27,9 @@ const router = Router()
  *                  type: array
  *                  items:
  *                      type: object
+ *                      required:
+ *                          - _id
+ *                          - numRegistrations
  *                      properties:
  *                          _id:
  *                              type: string
@@ -40,7 +43,7 @@ router.route('/')
                 {
                     $group: {
                         _id: "$event",
-                        registrations: {
+                        numRegistrations: {
                             $count: {}
                         }
                       }

@@ -26,7 +26,7 @@ describe('/api/Registrations', () => {
 
             expect(response.body.length).toBe(1)
             expect(response.body[0]).toHaveProperty('_id', event._id.toString())
-            expect(response.body[0]).toHaveProperty('registrations', 1)
+            expect(response.body[0]).toHaveProperty('numRegistrations', 1)
         })
 
     })
