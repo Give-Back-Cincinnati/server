@@ -40,7 +40,7 @@ export interface IGuestRegistration extends IRegistrations {
  *                  example: '513-555-1234'
  *              dateOfBirth:
  *                  type: string
- *                  format: date-time
+ *                  format: date
  *              hasAgreedToTerms:
  *                  type: boolean
  *                  default: false
