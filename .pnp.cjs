@@ -62,6 +62,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mongodb", "npm:4.8.1"],\
             ["mongodb-memory-server", "npm:8.8.0"],\
             ["mongoose", "npm:6.5.2"],\
+            ["nanoid", "npm:3.3.4"],\
             ["nodemon", "npm:2.0.19"],\
             ["passport", "npm:0.5.3"],\
             ["passport-google-oauth20", "npm:2.0.0"],\
@@ -6462,6 +6463,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["nanoid", [\
+        ["npm:3.3.4", {\
+          "packageLocation": "./.yarn/cache/nanoid-npm-3.3.4-3d250377d6-2fddd6dee9.zip/node_modules/nanoid/",\
+          "packageDependencies": [\
+            ["nanoid", "npm:3.3.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["natural-compare", [\
         ["npm:1.4.0", {\
           "packageLocation": "./.yarn/cache/natural-compare-npm-1.4.0-97b75b362d-23ad088b08.zip/node_modules/natural-compare/",\
@@ -7614,6 +7624,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mongodb", "npm:4.8.1"],\
             ["mongodb-memory-server", "npm:8.8.0"],\
             ["mongoose", "npm:6.5.2"],\
+            ["nanoid", "npm:3.3.4"],\
             ["nodemon", "npm:2.0.19"],\
             ["passport", "npm:0.5.3"],\
             ["passport-google-oauth20", "npm:2.0.0"],\

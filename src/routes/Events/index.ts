@@ -47,16 +47,41 @@ const router = Router()
  *        name: name
  *        type: string
  *      - in: query
+ *        name: slug
+ *        type: string
+ *      - in: query
  *        name: category
  *        schema:
  *          $ref: '#/components/schemas/EventCategories'
  *      - in: query
  *        name: startTime
+ *        style: deepObject
+ *        schema:
+ *          type: string
+ *          format: date-time
+ *      - in: query
+ *        name: startTime[$gt]
+ *        schema:
+ *          type: string
+ *          format: date-time
+ *      - in: query
+ *        name: startTime[$lt]
  *        schema:
  *          type: string
  *          format: date-time
  *      - in: query
  *        name: endTime
+ *        style: deepObject
+ *        schema:
+ *          type: string
+ *          format: date-time
+ *      - in: query
+ *        name: endTime[$gt]
+ *        schema:
+ *          type: string
+ *          format: date-time
+ *      - in: query
+ *        name: endTime[$lt]
  *        schema:
  *          type: string
  *          format: date-time
