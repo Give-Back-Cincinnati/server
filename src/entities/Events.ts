@@ -14,7 +14,7 @@ export interface IEvents {
     },
     startTime: Date,
     endTime: Date,
-    maxRegistrations?: Number
+    maxRegistrations?: number
 }
 
 /**

@@ -32,7 +32,7 @@ describe('Events', () => {
         expect(entity).toBeDefined()
         if(!entity) return
 
-        let originalName = entity.name
+        const originalName = entity.name
         entity.name = 'hello world'
         await entity.save()
         expect(entity.slug).toEqual(encodeURIComponent(originalName.toLowerCase().replace(/\s/g, '-') + '-' + new Date().getFullYear().toString() ))
