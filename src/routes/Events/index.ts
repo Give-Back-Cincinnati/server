@@ -114,15 +114,16 @@ const router = Router()
 router.route('/')
     .get(userHasPermissions('public'), async (req: Request, res: Response) => {
         try {
-            const { name, category, startTime, endTime }: { 
+            const { name, category, startTime, endTime, slug }: { 
                 name?: string,
                 category?: string,
                 startTime?: string,
-                endTime?: string
+                endTime?: string,
+                slug?: string
             } = req.query
 
             const searchFor = {
-                name, category, startTime, endTime
+                name, category, startTime, endTime, slug
             }
 
             const queryOptions = createQueryOptions(req.query)
