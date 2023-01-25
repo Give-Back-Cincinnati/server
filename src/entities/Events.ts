@@ -89,7 +89,7 @@ export const eventsSchema = new Schema({
 
 eventsSchema.pre('save', async function (x) {
     // generate a slug if one does not exist
-    if ((this.name && !this.slug) || (this.slug && /\W/.test(this.slug))) {
+    if (this.name && !this.slug) {
         this.slug = encodeURIComponent(this.name
             .toLowerCase()
             .replace(/\W+/g, '-')
