@@ -22,7 +22,7 @@ describe('Events', () => {
         expect(entity).toBeDefined()
         if(!entity) return
 
-        expect(entity.slug).toEqual(encodeURIComponent(entity.name.toLowerCase().replace(/\s/g, '-') + '-' + new Date().getFullYear().toString() ))
+        expect(entity.slug).toEqual(encodeURIComponent(entity.name.toLowerCase().replace(/\W+/g, '-') + '-' + new Date().getFullYear().toString() ))
     })
 
     it('does not save slug when updated', async () => {
@@ -35,7 +35,7 @@ describe('Events', () => {
         const originalName = entity.name
         entity.name = 'hello world'
         await entity.save()
-        expect(entity.slug).toEqual(encodeURIComponent(originalName.toLowerCase().replace(/\s/g, '-') + '-' + new Date().getFullYear().toString() ))
+        expect(entity.slug).toEqual(encodeURIComponent(originalName.toLowerCase().replace(/\W+/g, '-') + '-' + new Date().getFullYear().toString() ))
     })
 
     it('generates a new slug if a slug is already taken', async () => {

@@ -87,10 +87,13 @@ export const eventsSchema = new Schema({
     maxRegistrations: Number
 }, { timestamps: true })
 
-eventsSchema.pre('save', async function () {
+eventsSchema.pre('save', async function (x) {
     // generate a slug if one does not exist
-    if (this.name && !this.slug) {
-        this.slug = encodeURIComponent(this.name.toLowerCase().replace(/\s/g, '-')) + '-' + new Date().getFullYear().toString()
+    if ((this.name && !this.slug) || (this.slug && /\W/.test(this.slug))) {
+        this.slug = encodeURIComponent(this.name
+            .toLowerCase()
+            .replace(/\W+/g, '-')
+        ) + '-' + new Date().getFullYear().toString()
         // ensure slug is unique on first save, if not unique: add unique string to the end of the slugs
         const slugExistsEntity = await Events.findOne({ slug: this.slug })
         if (slugExistsEntity) {
