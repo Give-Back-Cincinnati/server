@@ -34,7 +34,7 @@ jobs:
           resource-group: ${{ secrets.CLUSTER_RESOURCE_GROUP }}
 
       - name: 'Setup Helm3'
-        uses: azure/setup-helm@v1
+        uses: azure/setup-helm@v3
         id: install
 
       - name: Checkout
@@ -67,7 +67,6 @@ jobs:
           container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           secret-name: ${{ secrets.PULL_SECRET }}
           namespace: ${{ secrets.NAMESPACE_STAGE }}
-          force: true
 
       - name: Deploy to Stage
         if: ${{ contains(github.ref, 'stage') }}
