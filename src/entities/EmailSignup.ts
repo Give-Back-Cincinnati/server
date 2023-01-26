@@ -8,7 +8,6 @@
  *              - FNAME
  *              - LNAME
  *              - EMAIL
- *              - MMERGE5
  *          properties:
  *              FNAME:
  *                  type: string
@@ -26,5 +25,5 @@
  *              MMERGE5:
  *                  type: string
  *                  example: 'P&G'
- *                  name: Company
+ *                  name: 'Company'
  */
