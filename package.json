@@ -19,6 +19,7 @@
         "healthcheck": "yarn ts-node --transpile-only docker/docker-healthcheck.mjs"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.257.0",
         "axios": "^0.26.1",
         "bcryptjs": "^2.4.3",
         "connect-redis": "^6.1.3",
