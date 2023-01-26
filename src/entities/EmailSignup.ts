@@ -1,10 +1,3 @@
-import { Schema, model, Types } from 'mongoose'
-
-export interface IEmailSignup {
-    _id: Types.ObjectId,
-    name: string
-}
-
 /**
  * @openapi
  * components:
@@ -12,17 +5,26 @@ export interface IEmailSignup {
  *      EmailSignup:
  *          type: object
  *          required:
- *              - name
+ *              - FNAME
+ *              - LNAME
+ *              - EMAIL
+ *              - MMERGE5
  *          properties:
- *              _id: 
+ *              FNAME:
  *                  type: string
- *                  example: '627afea4acf098768c92b855'
- *              name:
+ *                  example: 'Clark'
+ *                  name: 'First Name'
+ *              LNAME:
  *                  type: string
- *                  example: 'EmailSignup'
+ *                  example: 'Kent'
+ *                  name: 'Last Name'
+ *              EMAIL:
+ *                  type: string
+ *                  example: 'clark@dailyplanet.news'
+ *                  pattern: '^.+\@.+\..{2,}$'
+ *                  name: 'Email'
+ *              MMERGE5:
+ *                  type: string
+ *                  example: 'P&G'
+ *                  name: Company
  */
-export const emailsignupSchema = new Schema({
-    name: String
-}, { timestamps: true })
-
-export const EmailSignup = model<IEmailSignup>('EmailSignup', emailsignupSchema)
