@@ -4,6 +4,7 @@ import { IFilters } from '../src/entities/Filters'
 import { IPermissions } from '../src/entities/Permissions'
 import { IRoles } from '../src/entities/Roles'
 import { collectPermissions } from '../utils/permissions/collectPermissions'
+const { Uploads } = require('../src/entities/Uploads')
 const { Registrations, GuestRegistration } = require('../src/entities/Registrations')
 const { Events } = require('../src/entities/Events')
 const { Filters } = require('../src/entities/Filters')
@@ -11,6 +12,7 @@ const { Users } = require('../src/entities/Users')
 const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
+export const upload = new Uploads({ name: 'GBC Logo', url: 'https://givebackcincinnati.org/logos/half_circle.svg' })
 export const event = { _id: mongoose.Types.ObjectId(), name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date() }
 export const guestRegistration = { _id: mongoose.Types.ObjectId(), event, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234' }
 export const filter: IFilters = { _id: mongoose.Types.ObjectId(), name: 'user', filter: { firstName: 'hello' } }
@@ -46,6 +48,7 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
+	await upload.save()
 	await new Events(event).save()
 	await new GuestRegistration(guestRegistration).save()
 	await new Filters(filter).save()
@@ -68,6 +71,7 @@ afterEach(async () => {
     if (mongoose.connection.readyState !== 1) {
         await mongoose.connect(global.__MONGO_URI__)
     }
+	await Uploads.deleteMany({})
 	await Registrations.deleteMany({})
 	await Events.deleteMany({})
 	await Filters.deleteMany({})
@@ -86,5 +90,6 @@ afterAll(async () => {
 	await Filters.deleteMany({})
 	await Events.deleteMany({})
 	await Registrations.deleteMany({})
+	await Uploads.deleteMany({})
     await mongoose.disconnect()
 })
