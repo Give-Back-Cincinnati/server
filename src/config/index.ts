@@ -39,6 +39,17 @@ export const config = {
     },
     bcrypt: {
         saltRounds: parseInt(process.env.SALT_ROUNDS || "1") // recommend 13 in production
+    },
+    cloudflare: {
+        account_id: process.env.CLOUDFLARE_ACCOUNT_ID,
+    },
+    s3: {
+        baseUrl: 'https://static.givebackcincinnati.org/',
+        bucket: 'gbc-static',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ""
+        }
     }
 }
 

@@ -48,7 +48,7 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
-	await upload.save()
+	await new Uploads(upload).save()
 	await new Events(event).save()
 	await new GuestRegistration(guestRegistration).save()
 	await new Filters(filter).save()

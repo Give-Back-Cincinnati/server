@@ -3,7 +3,7 @@ import { IUploads, Uploads } from './Uploads'
 describe('Uploads', () => {
 
     it('creates a Uploads', async () => {
-        expect.assertions(2)
+        expect.assertions(3)
         
         const entity = await new Uploads({})
             .save()
@@ -11,6 +11,7 @@ describe('Uploads', () => {
 
         const found = await Uploads.findById(entity._id)
         expect(found).toBeDefined()
+        expect(found).toHaveProperty('isLive', false)
     })
 
     it('updates a Uploads', async () => {
