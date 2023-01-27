@@ -16,3 +16,4 @@ coverage/
 globalConfig.json
 .env
 var/
+local/
