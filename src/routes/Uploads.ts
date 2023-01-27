@@ -59,13 +59,24 @@ const router = Router()
  *      content:
  *          application/json:
  *              schema: 
- *                  $ref: '#/components/schemas/Uploads'
+ *                  type: object
+ *                  properties:
+ *                      name:
+ *                          type: string
+ *                      mime-type:
+ *                          type: string
+ *                          enum: [image/png, image/jpeg, image/svg+xml]
  *    responses:
  *      201:
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Uploads'
+ *                      type: object
+ *                      properties:
+ *                          _id:
+ *                              type: string
+ *                          url:
+ *                              type: string
  */
 router.route('/')
     .get(userHasPermissions(), async (req: Request, res: Response) => {
@@ -88,6 +99,8 @@ router.route('/')
         }
     })
     .post(userHasPermissions(), async (req: Request, res: Response) => {
+        // client mime-type implementation:
+        // https://stackoverflow.com/a/29672957
         try {
             const item = new Uploads(req.body)
             await item.save()
@@ -131,7 +144,11 @@ router.route('/')
  *          content:
  *              application/json:
  *                  schema: 
- *                      $ref: '#/components/schemas/Uploads'
+ *                      type: object
+ *                      parameters:
+ *                          isLive:
+ *                              type: enum
+ *                              enum: true
  *      responses:
  *          200:
  *              description: Success
