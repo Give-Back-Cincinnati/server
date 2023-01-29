@@ -4,6 +4,22 @@ import { Uploads } from '../entities/Uploads'
 import { userHasPermissions } from './auth/middleware'
 import { createFilteredQuery, createQueryOptions } from '../entities/queryUtils'
 
+import { config } from '../config'
+import {
+    S3Client,
+    PutObjectCommand
+} from '@aws-sdk/client-s3'
+
+import {
+    getSignedUrl
+} from '@aws-sdk/s3-request-presigner'
+
+const S3 = new S3Client({
+    region: "auto",
+    endpoint: `https://${config.cloudflare.account_id}.r2.cloudflarestorage.com`,
+    credentials: config.s3.credentials
+});
+
 /**
  * @openapi
  * tags: 
@@ -54,7 +70,7 @@ const router = Router()
  *      - uploads
  *    operationId: createUploads
  *    summary: Create a Uploads record
- *    description: Create a new Uploads record
+ *    description: Create a new uploads record and receive a presigned url
  *    requestBody:
  *      content:
  *          application/json:
@@ -75,7 +91,7 @@ const router = Router()
  *                      properties:
  *                          _id:
  *                              type: string
- *                          url:
+ *                          uploadUrl:
  *                              type: string
  */
 router.route('/')
@@ -102,9 +118,23 @@ router.route('/')
         // client mime-type implementation:
         // https://stackoverflow.com/a/29672957
         try {
-            const item = new Uploads(req.body)
+            const item = new Uploads({
+                name: req.body.name
+            })
+
+            const Key = `uploads/${item._id}.png`
+            item.url =`https://static.givebackcincinnati.org//${Key}` // for some reason R2 adds an extra delimiter on folder
+
+            const uploadUrl = await getSignedUrl(S3, new PutObjectCommand({
+                Bucket: config.s3.bucket,
+                Key
+            }), { expiresIn: 3600 })
             await item.save()
-            res.status(201).json(item)
+
+            res.status(201).send({
+                _id: item._id,
+                uploadUrl
+            })
         } catch (e) {
             res.sendStatus(500)
             logger.error(e)
@@ -117,38 +147,12 @@ router.route('/')
  *  parameters:
  *      - in: path
  *        name: id
- *  get:
- *      tags:
- *          - uploads
- *      operationId: getUploads
- *      summary: Get a single Uploads record
- *      description: Get a single Uploads record
- *      responses:
- *          200:
- *              description: Success
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Uploads'
- *          404:
- *              description: Item not found
- *          default:
- *              description: An unknown error occurred
  *  patch:
  *      tags:
  *          - uploads
  *      operationId: updateUploads
  *      summary: Update a single Uploads record
- *      description: Update a single Uploads record
- *      requestBody:
- *          content:
- *              application/json:
- *                  schema: 
- *                      type: object
- *                      parameters:
- *                          isLive:
- *                              type: enum
- *                              enum: true
+ *      description: Update a single Uploads record to be a live record, this is a one way operation
  *      responses:
  *          200:
  *              description: Success
@@ -175,25 +179,12 @@ router.route('/')
  *              description: An unknown error occurred
  */
 router.route('/:id')
-    .get(userHasPermissions(), async (req: Request, res: Response) => {
-        try {
-            const item = await Uploads.findOne(createFilteredQuery({ _id: req.params.id }, req))
-            if (item) {
-                res.json(item)
-                return
-            }
-            res.sendStatus(404)
-        } catch (e) {
-            res.sendStatus(500)
-            logger.error(e)
-        }
-    })
     .patch(userHasPermissions(), async (req: Request, res: Response) => {
         try {
             const item = await Uploads.findOne(createFilteredQuery({ _id: req.params.id }, req))
             if (!item) return res.sendStatus(404)
 
-            item.set(req.body)
+            item.set({ isLive: true })
             await item.save()
 
             res.json(item)

@@ -43,9 +43,10 @@ describe('/api/Uploads', () => {
             expect(response.statusCode).toBe(201)
         })
 
-        it('returns the new Uploads', async () => {
+        it('returns a presigned url and the _id', async () => {
             const response = await superadminAgent.post('/Uploads').send({ name: 'Uploads' })
-            expect(response.body).toHaveProperty('name', 'Uploads')
+            expect(response.body).toHaveProperty('_id', expect.any(String))
+            expect(response.body).toHaveProperty('uploadUrl', expect.any(String))
         })
 
         it('inserts the new Uploads', async () => {
@@ -68,60 +69,30 @@ describe('/api/Uploads', () => {
 
     describe('/:id', () => {
 
-        describe('GET', () => {
-
-            it('returns a 200', async () => {
-                const response = await superadminAgent.get(`/Uploads/${item._id}`)
-                expect(response.statusCode).toBe(200)
-            })
-
-            it('returns the Uploads', async () => {
-                const response = await superadminAgent.get(`/Uploads/${item._id}`)
-                expect(response.body).toHaveProperty('_id', expect.any(String))
-                expect(response.body).toHaveProperty('__v', 0)
-            })
-
-            it('returns a 404', async () => {
-                const response = await superadminAgent.get(`/Uploads/${new mongoose.Types.ObjectId()}`)
-                expect(response.statusCode).toBe(404)
-            })
-
-            it('sends a 500 if a cast error occurs on _id', async () => {
-                const response = await superadminAgent.get(`/Uploads/dfghjkkjhgf`)
-                expect(response.statusCode).toBe(500)
-            })
-
-            it('returns a 401 for a user without permissions', async () => {
-                const response = await request(app).get(`/Uploads/${item._id}`)
-                expect(response.statusCode).toBe(401)
-            })
-
-        })
-
         describe('PATCH', () => {
 
             it('returns a 200', async () => {
-                const response = await superadminAgent.patch(`/Uploads/${item._id}`).send({ name: 'Uploads' })
+                const response = await superadminAgent.patch(`/Uploads/${item._id}`).send()
                 expect(response.statusCode).toBe(200)
             })
 
             it('returns the updated Uploads', async () => {
-                const response = await superadminAgent.patch(`/Uploads/${item._id}`).send({ name: 'Superman' })
+                const response = await superadminAgent.patch(`/Uploads/${item._id}`).send()
                 expect(response.body).toHaveProperty('name', 'Superman')
             })
 
             it('returns a 404', async () => {
-                const response = await superadminAgent.patch(`/Uploads/${new mongoose.Types.ObjectId()}`).send({ name: 'Uploads' })
+                const response = await superadminAgent.patch(`/Uploads/${new mongoose.Types.ObjectId()}`).send()
                 expect(response.statusCode).toBe(404)
             })
 
             it('sends a 500 if a cast error occurs on _id', async () => {
-                const response = await superadminAgent.patch(`/Uploads/dfghjkkjhgf`).send({ name: 'Uploads' })
+                const response = await superadminAgent.patch(`/Uploads/dfghjkkjhgf`).send()
                 expect(response.statusCode).toBe(500)
             })
 
             it('returns a 401 for a user without permissions', async () => {
-                const response = await request(app).patch(`/Uploads/${item._id}`).send({ name: 'Uploads' })
+                const response = await request(app).patch(`/Uploads/${item._id}`).send()
                 expect(response.statusCode).toBe(401)
             })
 
