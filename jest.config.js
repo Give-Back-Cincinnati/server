@@ -8,6 +8,7 @@ module.exports = {
         ...tsjPreset.transform
     },
     moduleNameMapper: {
+        "uuid": require.resolve('uuid'),
         '^(\\.{1,2}/.*)\\.js$': '$1',
     },
     watchPathIgnorePatterns: ['globalConfig'],
