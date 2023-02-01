@@ -67,7 +67,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mongoose", "npm:6.5.2"],\
             ["nanoid", "npm:3.3.4"],\
             ["nodemon", "npm:2.0.19"],\
-            ["passport", "npm:0.5.3"],\
+            ["passport", "npm:0.6.0"],\
             ["passport-google-oauth20", "npm:2.0.0"],\
             ["passport-local", "npm:1.0.0"],\
             ["pino", "npm:8.4.1"],\
@@ -8164,12 +8164,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["passport", [\
-        ["npm:0.5.3", {\
-          "packageLocation": "./.yarn/cache/passport-npm-0.5.3-d0fcb144d9-5430b31b7e.zip/node_modules/passport/",\
+        ["npm:0.6.0", {\
+          "packageLocation": "./.yarn/cache/passport-npm-0.6.0-0a57682d5b-ef932ad671.zip/node_modules/passport/",\
           "packageDependencies": [\
-            ["passport", "npm:0.5.3"],\
+            ["passport", "npm:0.6.0"],\
             ["passport-strategy", "npm:1.0.0"],\
-            ["pause", "npm:0.0.1"]\
+            ["pause", "npm:0.0.1"],\
+            ["utils-merge", "npm:1.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8992,7 +8993,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mongoose", "npm:6.5.2"],\
             ["nanoid", "npm:3.3.4"],\
             ["nodemon", "npm:2.0.19"],\
-            ["passport", "npm:0.5.3"],\
+            ["passport", "npm:0.6.0"],\
             ["passport-google-oauth20", "npm:2.0.0"],\
             ["passport-local", "npm:1.0.0"],\
             ["pino", "npm:8.4.1"],\
