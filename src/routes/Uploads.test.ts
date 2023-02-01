@@ -4,6 +4,15 @@ import { upload as item } from '../../jest/setup'
 import { getLoggedInSuperAdminAgent } from '../../jest/utilities'
 import { app } from './index'
 import { Uploads } from '../entities/Uploads'
+import { useServices } from '../services'
+
+const fakePresignedUrl = "https://random/key.png"
+
+jest.mock('../services', () => ({
+    useServices: () => ({
+        getPresignedUrl: (key: string) => fakePresignedUrl
+    })
+}))
 
 // suppress error messages
 jest.spyOn(console, 'error')
@@ -37,31 +46,42 @@ describe('/api/Uploads', () => {
     })
 
     describe('POST', () => {
+        const name = 'Uploads.png'
+        const mimeType = 'image/png'
             
         it('returns a 201', async () => {
-            const response = await superadminAgent.post('/Uploads').send({})
+            const response = await superadminAgent.post('/Uploads').send({ name, mimeType })
             expect(response.statusCode).toBe(201)
         })
 
         it('returns a presigned url and the _id', async () => {
-            const response = await superadminAgent.post('/Uploads').send({ name: 'Uploads' })
+            const response = await superadminAgent.post('/Uploads').send({ name, mimeType })
             expect(response.body).toHaveProperty('_id', expect.any(String))
-            expect(response.body).toHaveProperty('uploadUrl', expect.any(String))
+            expect(response.body).toHaveProperty('uploadUrl', fakePresignedUrl)
         })
 
         it('inserts the new Uploads', async () => {
-            const response = await superadminAgent.post('/Uploads').send({ name: 'Uploads' })
+            const response = await superadminAgent.post('/Uploads').send({ name, mimeType })
             const item = await Uploads.findById(response.body._id)
-            expect(item).toHaveProperty('name', 'Uploads')
+            expect(item).toHaveProperty('name', name.toLowerCase())
+        })
+
+        it('returns a 400 if the mime-type is not valid', async () => {
+            expect.assertions(2)
+            const fakeMimeType = 'notAReal/mimetype'
+
+            const response = await superadminAgent.post('/Uploads').send({ name, mimeType: fakeMimeType })
+            expect(response.statusCode).toBe(400)
+            expect(response.text).toEqual(`Invalid filetype, received: ${fakeMimeType}`)
         })
 
         it('returns a 401 for a user without permissions', async () => {
-            const response = await request(app).post('/Uploads').send({ name: 'Uploads' })
+            const response = await request(app).post('/Uploads').send({ name, mimeType })
             expect(response.statusCode).toBe(401)
         })
 
         it('returns 500 if the body is malformed', async () => {
-            const response = await superadminAgent.post('/Uploads').send({ _id: 'asdasfas' })
+            const response = await superadminAgent.post('/Uploads').send({ _id: 'asdasfas', mimeType })
             expect(response.statusCode).toEqual(500)
         })
     
@@ -76,9 +96,12 @@ describe('/api/Uploads', () => {
                 expect(response.statusCode).toBe(200)
             })
 
-            it('returns the updated Uploads', async () => {
+            it('updates the isLive to true', async () => {
+                const found = await Uploads.findById(item._id)
+                expect(found).toHaveProperty('isLive', false)
+
                 const response = await superadminAgent.patch(`/Uploads/${item._id}`).send()
-                expect(response.body).toHaveProperty('name', 'Superman')
+                expect(response.body).toHaveProperty('isLive', true)
             })
 
             it('returns a 404', async () => {

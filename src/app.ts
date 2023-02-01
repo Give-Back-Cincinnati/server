@@ -2,6 +2,7 @@ import http from 'http'
 import { config, logger } from './config'
 import { app } from './routes/index'
 import { establishMongooseConnection } from './mongodb'
+import { createServices } from './services'
 
 const port = config.port
 app.set('port', port)
@@ -69,6 +70,7 @@ establishMongooseConnection()
         server.listen(port)
         server.on('error', onError)
         server.on('listening', onListening)
+        createServices()
     })
 
 process.on('SIGTERM', () => {

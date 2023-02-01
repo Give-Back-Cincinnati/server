@@ -4,21 +4,8 @@ import { Uploads } from '../entities/Uploads'
 import { userHasPermissions } from './auth/middleware'
 import { createFilteredQuery, createQueryOptions } from '../entities/queryUtils'
 
-import { config } from '../config'
-import {
-    S3Client,
-    PutObjectCommand
-} from '@aws-sdk/client-s3'
-
-import {
-    getSignedUrl
-} from '@aws-sdk/s3-request-presigner'
-
-const S3 = new S3Client({
-    region: "auto",
-    endpoint: `https://${config.cloudflare.account_id}.r2.cloudflarestorage.com`,
-    credentials: config.s3.credentials
-});
+import { useServices } from '../services'
+const UploadService = useServices('Upload')
 
 /**
  * @openapi
@@ -81,7 +68,7 @@ const router = Router()
  *                          type: string
  *                      mime-type:
  *                          type: string
- *                          enum: [image/png, image/jpeg, image/svg+xml]
+ *                          enum: [image/png, image/jpeg, image/svg+xml, application/pdf]
  *    responses:
  *      201:
  *          content:
@@ -118,17 +105,26 @@ router.route('/')
         // client mime-type implementation:
         // https://stackoverflow.com/a/29672957
         try {
+            const mimeTypesMap = {
+                "image/png": ".png",
+                "image/jpeg": ".jpg",
+                "image/svg+xml": ".svg",
+                "application/pdf": ".pdf"
+            } as Record<string, string>
+
+            const mimeType: string | undefined = req.body.mimeType
+            if (mimeType === undefined) return res.sendStatus(400)
+            if (mimeTypesMap[mimeType] === undefined) return res.status(400).send(`Invalid filetype, received: ${mimeType}`)
+
             const item = new Uploads({
-                name: req.body.name
+                name: req.body.name.toLowerCase()
             })
 
-            const Key = `uploads/${item._id}.png`
+            const Key = `uploads/${item._id}.${mimeTypesMap[mimeType]}`
             item.url =`https://static.givebackcincinnati.org//${Key}` // for some reason R2 adds an extra delimiter on folder
 
-            const uploadUrl = await getSignedUrl(S3, new PutObjectCommand({
-                Bucket: config.s3.bucket,
-                Key
-            }), { expiresIn: 3600 })
+            const uploadUrl = await UploadService.getPresignedUrl(Key)
+
             await item.save()
 
             res.status(201).send({
@@ -156,10 +152,6 @@ router.route('/')
  *      responses:
  *          200:
  *              description: Success
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Uploads'
  *          404:
  *              description: Item not found
  *          default:

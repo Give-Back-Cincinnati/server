@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 import { HydratedDocument } from 'mongoose'
+import { createServices } from '../src/services'
+createServices()
 import { IFilters } from '../src/entities/Filters'
 import { IPermissions } from '../src/entities/Permissions'
 import { IRoles } from '../src/entities/Roles'

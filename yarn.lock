@@ -7400,7 +7400,7 @@ __metadata:
     ts-jest: ^29.0.5
     ts-node: ^10.7.0
     typescript: ^4.6.3
-    uuid: ^8
+    uuid: ^8.0.0
   dependenciesMeta:
     ts-node@10.7.0:
       unplugged: true
@@ -8143,7 +8143,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:8.3.2, uuid@npm:^8, uuid@npm:^8.3.1, uuid@npm:^8.3.2":
+"uuid@npm:8.3.2, uuid@npm:^8.0.0, uuid@npm:^8.3.1, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
