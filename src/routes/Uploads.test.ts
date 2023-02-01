@@ -4,7 +4,6 @@ import { upload as item } from '../../jest/setup'
 import { getLoggedInSuperAdminAgent } from '../../jest/utilities'
 import { app } from './index'
 import { Uploads } from '../entities/Uploads'
-import { useServices } from '../services'
 
 const fakePresignedUrl = "https://random/key.png"
 

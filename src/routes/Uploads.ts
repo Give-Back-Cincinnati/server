@@ -112,9 +112,8 @@ router.route('/')
                 "application/pdf": ".pdf"
             } as Record<string, string>
 
-            const mimeType: string | undefined = req.body.mimeType
-            if (mimeType === undefined) return res.sendStatus(400)
-            if (mimeTypesMap[mimeType] === undefined) return res.status(400).send(`Invalid filetype, received: ${mimeType}`)
+            const { mimeType }: { mimeType: string | undefined } = req.body
+            if (mimeType === undefined || mimeTypesMap[mimeType] === undefined) return res.status(400).send(`Invalid filetype, received: ${mimeType}`)
 
             const item = new Uploads({
                 name: req.body.name.toLowerCase()
