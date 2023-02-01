@@ -59,6 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.18.1"],\
             ["express-session", "npm:1.17.3"],\
             ["helmet", "npm:5.1.1"],\
+            ["husky", "npm:8.0.3"],\
             ["jest", "virtual:48fd9d653646a991d0eda5ffe92778b72de446c151643ca5c3964e62f24bed64d28e19b09ae1edf82cd4ab484e9e16d2c4b4953045a3524fb9431546d36f4563#npm:29.0.1"],\
             ["jest-environment-node", "npm:27.5.1"],\
             ["mongodb", "npm:4.8.1"],\
@@ -72,6 +73,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pino", "npm:8.4.1"],\
             ["pino-http", "npm:8.2.0"],\
             ["pino-pretty", "npm:8.1.0"],\
+            ["pinst", "npm:3.0.0"],\
             ["polar-cli", "npm:0.5.6"],\
             ["redis", "npm:4.2.0"],\
             ["supertest", "npm:6.2.4"],\
@@ -6173,6 +6175,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["husky", [\
+        ["npm:8.0.3", {\
+          "packageLocation": "./.yarn/cache/husky-npm-8.0.3-b0b59c5127-837bc7e441.zip/node_modules/husky/",\
+          "packageDependencies": [\
+            ["husky", "npm:8.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["iconv-lite", [\
         ["npm:0.4.24", {\
           "packageLocation": "./.yarn/cache/iconv-lite-npm-0.4.24-c5c4ac6695-bd9f120f5a.zip/node_modules/iconv-lite/",\
@@ -8373,6 +8384,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["pinst", [\
+        ["npm:3.0.0", {\
+          "packageLocation": "./.yarn/cache/pinst-npm-3.0.0-5d2b6c1dda-4ae48a6a60.zip/node_modules/pinst/",\
+          "packageDependencies": [\
+            ["pinst", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["pirates", [\
         ["npm:4.0.5", {\
           "packageLocation": "./.yarn/cache/pirates-npm-4.0.5-22f8e827ce-c9994e61b8.zip/node_modules/pirates/",\
@@ -8964,6 +8984,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.18.1"],\
             ["express-session", "npm:1.17.3"],\
             ["helmet", "npm:5.1.1"],\
+            ["husky", "npm:8.0.3"],\
             ["jest", "virtual:48fd9d653646a991d0eda5ffe92778b72de446c151643ca5c3964e62f24bed64d28e19b09ae1edf82cd4ab484e9e16d2c4b4953045a3524fb9431546d36f4563#npm:29.0.1"],\
             ["jest-environment-node", "npm:27.5.1"],\
             ["mongodb", "npm:4.8.1"],\
@@ -8977,6 +8998,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pino", "npm:8.4.1"],\
             ["pino-http", "npm:8.2.0"],\
             ["pino-pretty", "npm:8.1.0"],\
+            ["pinst", "npm:3.0.0"],\
             ["polar-cli", "npm:0.5.6"],\
             ["redis", "npm:4.2.0"],\
             ["supertest", "npm:6.2.4"],\
