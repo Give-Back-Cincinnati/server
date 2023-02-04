@@ -8,8 +8,19 @@ if (process.env.MONGO_URL) {
     process.env.MONGODB_HOST = uri.slice(uri.indexOf('://') + 3, uri.indexOf('/', uri.indexOf('://') + 3))
 }
 
+function determineDefaultPort() {
+    switch(process.env.NODE_ENV) {
+        case 'test':
+            // Randomly chosen port to ensure no conflicts,
+            //      especially when running tests locally and developing client too
+            return 31526
+        default:
+            return process.env.PORT || 3000
+    }
+}
+
 export const config = {
-    port: process.env.PORT || 3000,
+    port: determineDefaultPort(),
     node_env: process.env.NODE_ENV,
     npm_package_version: process.env.npm_package_version || '0.0.0',
     npm_package_name: process.env.npm_package_name || 'API',

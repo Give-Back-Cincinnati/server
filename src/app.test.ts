@@ -1,4 +1,5 @@
 import { server, ErrnoException } from './app'
+import { config } from './config'
 
 const mockExit = jest.spyOn(process, 'exit')
     .mockImplementation((number: number | undefined) => { throw new Error('process.exit: ' + number); });
@@ -29,7 +30,7 @@ describe('server', () => {
 
     it('fires onListening', () => {
         server.emit('listening')
-        expect(mockConsoleInfo).toHaveBeenCalledWith('Listening on port 3000')
+        expect(mockConsoleInfo).toHaveBeenCalledWith(`Listening on port ${config.port}`)
     })
 
     it('processes a non-fatal error and stays alive', () => {
@@ -50,7 +51,7 @@ describe('server', () => {
             server.emit('error', err)
         } catch (e) {
             expect(mockExit).toHaveBeenCalled()
-            expect(mockConsoleError).toHaveBeenCalledWith('Port 3000 requires elevated privileges')
+            expect(mockConsoleError).toHaveBeenCalledWith(`Port ${config.port} requires elevated privileges`)
         }
     })
 
@@ -62,7 +63,7 @@ describe('server', () => {
             server.emit('error', err)
         } catch (e) {
             expect(mockExit).toHaveBeenCalled()
-            expect(mockConsoleError).toHaveBeenCalledWith('Port 3000 is already in use')
+            expect(mockConsoleError).toHaveBeenCalledWith(`Port ${config.port} is already in use`)
         }
     })
 
