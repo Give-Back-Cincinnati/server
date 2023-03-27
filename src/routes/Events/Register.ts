@@ -1,6 +1,7 @@
 import { logger } from '../../config/index'
 import { Response, Request } from 'express'
 import { Registrations, GuestRegistration, UserRegistration } from '../../entities/Registrations'
+import { Events } from '../../entities/Events'
 import { createFilteredQuery, createQueryOptions,
     //  createQueryOptions
 } from '../../entities/queryUtils'
@@ -89,6 +90,19 @@ export const getRegistrations = async (req: Request, res: Response) => {
 
 export const createRegistration = async (req: Request, res: Response) => {
         try {
+            const event = await Events.findById(req.params.eventId)
+            if (!event) return res.sendStatus(404)
+
+            if (event.maxRegistrations) {
+                // check if there are already too many registrations
+                const numRegistrations = await Registrations.countDocuments({ event: req.params.eventId })
+                if (numRegistrations >= event.maxRegistrations) {
+                    res.status(400)
+                    res.statusMessage = 'Event is full'
+                    return res.send()
+                }
+            }
+
             if (req.isAuthenticated()) {
                 await new UserRegistration({
                     event: req.params.eventId,

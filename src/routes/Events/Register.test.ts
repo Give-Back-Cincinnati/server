@@ -80,6 +80,16 @@ describe('/api/Events/:id/register', () => {
                 expect(foundRegistration).toHaveProperty('user', superadmin._id)
             })
 
+            it('returns a 400 if the event is full', async () => {
+                expect.assertions(1)
+
+                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), maxRegistrations: 1 }).save()
+                await new GuestRegistration({ event, firstName: 'Clark', lastName: 'Kent', email: 'clar@kent.com', dateOfBirth: new Date(), phone: '513-555-1234' }).save()
+
+                const response = await request(app).post(`/Events/${event._id}/register`).send(registrationData)
+
+                expect(response.statusCode).toBe(400)
+            })
         })        
     })
 
