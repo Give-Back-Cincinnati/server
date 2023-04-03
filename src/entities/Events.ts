@@ -87,7 +87,7 @@ export const eventsSchema = new Schema({
     maxRegistrations: Number
 }, { timestamps: true })
 
-eventsSchema.pre('save', async function (x) {
+eventsSchema.pre('save', async function () {
     // generate a slug if one does not exist
     if (this.name && !this.slug) {
         this.slug = encodeURIComponent(this.name
