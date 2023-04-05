@@ -7,10 +7,11 @@ import swaggerUi from 'swagger-ui-express'
 import pinoHttp from 'pino-http'
 import { config } from '../config'
 import { setupPassport } from "./auth"
-import Registrations from './Registrations'
+import DynamicPages from './DynamicPages'
 import Events from './Events'
 import Filters from './Filters'
 import Permissions from './Permissions'
+import Registrations from './Registrations'
 import Roles from './Roles'
 import Users from './Users'
 import auth from './auth'
@@ -75,10 +76,11 @@ if (config.node_env !== 'test') {
 app.use(express.json())
 setupPassport(app)
 
+app.use('/dynamicpages', DynamicPages)
 app.use('/events', Events)
 app.use('/filters', Filters)
 app.use('/permissions', Permissions)
+app.use('/registrations', Registrations)
 app.use('/roles', Roles)
 app.use('/users', Users)
 app.use('/auth', auth)
-app.use('/registrations', Registrations)
