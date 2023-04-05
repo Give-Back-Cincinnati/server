@@ -38,7 +38,7 @@ export interface IDynamicPages {
  */
 export const dynamicpagesSchema = new Schema({
     name: String,
-    url: { type: String, unique: true },
+    url: { type: String, unique: true, lowercase: true },
     experience: String
 }, { timestamps: true })
 
