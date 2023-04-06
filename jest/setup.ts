@@ -12,7 +12,7 @@ const { Users } = require('../src/entities/Users')
 const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
-export const dynamicpage = new DynamicPages({ _id: mongoose.Types.ObjectId(), name: 'test', url: '/test', experience: JSON.stringify([{ component: 'Header', props: { title: 'Edited Title' } }]) })
+export const dynamicpage = new DynamicPages({ _id: mongoose.Types.ObjectId(), name: 'test', url: 'test', experience: JSON.stringify([{ component: 'Header', props: { title: 'Edited Title' } }]) })
 export const event = { _id: mongoose.Types.ObjectId(), name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date() }
 export const guestRegistration = { _id: mongoose.Types.ObjectId(), event, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234' }
 export const filter: IFilters = { _id: mongoose.Types.ObjectId(), name: 'user', filter: { firstName: 'hello' } }

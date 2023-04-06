@@ -79,9 +79,12 @@ router.route('/')
                 url?: string,
             } = req.query
 
-            const searchFor = {
-                name,
-                url
+            const searchFor: Record<string, unknown> = {
+                name
+            }
+
+            if (url) {
+                searchFor.url = new RegExp(url)
             }
 
             const queryOptions = createQueryOptions(req.query)

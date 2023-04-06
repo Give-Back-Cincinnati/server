@@ -33,6 +33,36 @@ describe('/api/DynamicPages', () => {
             expect(response.statusCode).toBe(200)
         })
 
+        it('returns an empty array on nonsense url query', async () => {
+            expect.assertions(1)
+            const response = await request(app).get(`/DynamicPages?url={item.url}`)
+            expect(response.body.length).toBe(0)
+        })
+
+        it('returns the specific dynamic page specified in url query', async () => {
+            expect.assertions(1)
+            const response = await request(app).get(`/DynamicPages?url=${item.url}`)
+            expect(response.body.length).toBe(1)
+        })
+
+        it('returns dynamic pages based on regex string url', async () => {
+            expect.assertions(1)
+
+            const response = await request(app).get('/DynamicPages?url=^test')
+            expect(response.body.length).toBe(1)
+        })
+
+        it('returns all urls that match the regex string url', async () => {
+            expect.assertions(2)
+            await new DynamicPages({ ...item, url: 'test/subpage' }).save()
+            const allItems = await DynamicPages.countDocuments()
+            expect(allItems).toBe(2)
+
+            const response = await request(app).get('/DynamicPages?url=test$')
+            expect(response.body.length).toBe(1)
+        })
+
+
     })
 
     describe('POST', () => {
