@@ -19,6 +19,7 @@ export interface IEvents {
         type: string,
         enum?: string[],
         name?: string,
+        isRequired?: boolean
     }>
 }
 
@@ -81,6 +82,8 @@ export interface IEvents {
  *                             type: array
  *                             items:
  *                                type: string
+ *                          isRequired:
+ *                             type: boolean
  */
 export const eventsSchema = new Schema({
     name: { type: String, required: true },
@@ -109,6 +112,7 @@ export const eventsSchema = new Schema({
         of: { 
             type: { type: String, enum: ['string', 'enum'] },
             enum: [String],
+            isRequired: { type: Boolean, default: false },
          },
         default: {}
     }
