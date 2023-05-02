@@ -30,8 +30,8 @@ export interface IGuestRegistration extends IRegistrations {
  *      EmergencyContact:
  *          type: object
  *          required:
- *            - name
- *            - phone
+ *            - eContactName
+ *            - eContactPhone
  *          properties:
  *             eContactName:
  *               type: string
