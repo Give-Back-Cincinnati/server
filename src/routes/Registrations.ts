@@ -16,6 +16,11 @@ const router = Router()
  *  get:
  *    tags:
  *      - registrations
+ *    parameters:
+ *      - in: query
+ *        name: eventId
+ *        schema:
+ *            type: string
  *    operationId: searchRegistrations
  *    summary: Search Registrations records
  *    description: Get Registrations records

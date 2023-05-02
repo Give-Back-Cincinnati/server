@@ -104,16 +104,36 @@ export const createRegistration = async (req: Request, res: Response) => {
             }
 
             if (req.isAuthenticated()) {
-                await new UserRegistration({
+                const nonCustomPaths = Object.keys(UserRegistration.schema.paths)
+                const customFields: Map<string, any> = new Map()
+                const userRegistration = new UserRegistration({
+                    ...req.body,
                     event: req.params.eventId,
-                    user: req.user as IUser,
-                    ...req.body
-                }).save()
+                    user: req.user as IUser
+                })
+
+                Object.entries(req.body).forEach(([key, value]) => {
+                    if (nonCustomPaths.includes(key)) return
+                    customFields.set(key, value)
+                })
+                userRegistration.set('customFields', customFields)
+
+                await userRegistration.save()
             } else {
-                await new GuestRegistration({
+                const nonCustomPaths = Object.keys(GuestRegistration.schema.paths)
+                const customFields: Map<string, any> = new Map()
+                const guestRegistration = new GuestRegistration({
                     ...req.body,
                     event: req.params.eventId
-                }).save()
+                })
+
+                Object.entries(req.body).forEach(([key, value]) => {
+                    if (nonCustomPaths.includes(key)) return
+                    customFields.set(key, value)
+                })
+                guestRegistration.set('customFields', customFields)
+
+                await guestRegistration.save()
             }
             res.status(201)
         } catch (e) {
