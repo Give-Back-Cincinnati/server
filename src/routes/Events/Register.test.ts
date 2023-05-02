@@ -40,7 +40,7 @@ describe('/api/Events/:id/register', () => {
             it('responds with all registrations for a specific event for a superadmin', async () => {
                 expect.assertions(3)
                 const event1 = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date() }).save()
-                await new GuestRegistration({ event: event1, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234' }).save()
+                await new GuestRegistration({ event: event1, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-1234' }).save()
                 
                 const response = await superadminAgent.get(`/Events/${item._id}/register`)
 
@@ -71,7 +71,9 @@ describe('/api/Events/:id/register', () => {
                     .send({
                         phone: '513-555-1234',
                         dateOfBirth: new Date('01-01-1990'),
-                        hasAgreedToTerms: true
+                        hasAgreedToTerms: true,
+                        eContactName: 'Mom',
+                        eContactPhone: '513-555-1234',
                     })
                 const foundRegistration = await UserRegistration.findOne({ event: item._id, user: superadmin._id })
                 
@@ -84,11 +86,61 @@ describe('/api/Events/:id/register', () => {
                 expect.assertions(1)
 
                 const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), maxRegistrations: 1 }).save()
-                await new GuestRegistration({ event, firstName: 'Clark', lastName: 'Kent', email: 'clar@kent.com', dateOfBirth: new Date(), phone: '513-555-1234' }).save()
+                await new GuestRegistration({ event, firstName: 'Clark', lastName: 'Kent', email: 'clar@kent.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-1234' }).save()
 
                 const response = await request(app).post(`/Events/${event._id}/register`).send(registrationData)
 
                 expect(response.statusCode).toBe(400)
+            })
+
+            it('correctly sets custom fields for unauthenticated user', async () => {
+                expect.assertions(3)
+                const customFields = {
+                    'customField1': {
+                        'type': 'text',
+                        'name': 'Custom Field 1',
+                    }
+                }
+                const registrationCustomValue = 'customValue1'
+
+                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), customFields }).save()
+                
+                const response = await request(app).post(`/Events/${event._id}/register`).send({...registrationData, customField1: registrationCustomValue})
+
+                const eventRegistration = await GuestRegistration.findOne({ event: event._id })
+
+                expect(event.customFields.get('customField1')).toEqual(customFields.customField1)
+                expect(response.statusCode).toBe(201)
+                expect(eventRegistration?.customFields.get('customField1')).toEqual(registrationCustomValue)
+            })
+
+            it('correctly sets custom fields for authenticated user', async () => {
+                expect.assertions(3)
+                const customFields = {
+                    'customField1': {
+                        'type': 'text',
+                        'name': 'Custom Field 1',
+                    }
+                }
+                const registrationCustomValue = 'customValue1'
+
+                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), customFields }).save()
+                
+                const response = await superadminAgent.post(`/Events/${event._id}/register`)
+                    .send({
+                        phone: '513-555-1234',
+                        dateOfBirth: new Date('01-01-1990'),
+                        hasAgreedToTerms: true,
+                        eContactName: 'Mom',
+                        eContactPhone: '513-555-1234',
+                        customField1: registrationCustomValue
+                    })
+
+                const eventRegistration = await UserRegistration.findOne({ event: event })
+
+                expect(event.customFields.get('customField1')).toEqual(customFields.customField1)
+                expect(response.statusCode).toBe(201)
+                expect(eventRegistration?.customFields.get('customField1')).toEqual(registrationCustomValue)
             })
         })        
     })

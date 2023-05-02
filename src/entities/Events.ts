@@ -14,7 +14,12 @@ export interface IEvents {
     },
     startTime: Date,
     endTime: Date,
-    maxRegistrations?: number
+    maxRegistrations?: number,
+    customFields: Map<string, {
+        type: string,
+        enum?: string[],
+        name?: string,
+    }>
 }
 
 /**
@@ -62,6 +67,20 @@ export interface IEvents {
  *                  format: date-time
  *              maxRegistrations:
  *                  type: number
+ *              customFields:
+ *                  type: object
+ *                  additionalProperties: 
+ *                     type: object
+ *                     properties:
+ *                          type:
+ *                              type: string
+ *                              enum: ['string']
+ *                          name:
+ *                              type: string
+ *                          enum:
+ *                             type: array
+ *                             items:
+ *                                type: string
  */
 export const eventsSchema = new Schema({
     name: { type: String, required: true },
@@ -84,7 +103,15 @@ export const eventsSchema = new Schema({
     },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
-    maxRegistrations: Number
+    maxRegistrations: Number,
+    customFields: {
+        type: Map,
+        of: { 
+            type: { type: String, enum: ['string', 'enum'] },
+            enum: [String],
+         },
+        default: {}
+    }
 }, { timestamps: true })
 
 eventsSchema.pre('save', async function () {

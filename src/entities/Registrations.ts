@@ -8,6 +8,9 @@ export interface IRegistrations {
     dateOfBirth: Date,
     hasAgreedToTerms: boolean,
     checkedIn: boolean,
+    eContactName: string,
+    eContactPhone: string,
+    customFields: Map<string, string>
 }
 
 export interface IUserRegistration extends IRegistrations {
@@ -24,12 +27,26 @@ export interface IGuestRegistration extends IRegistrations {
  * @openapi
  * components:
  *  schemas:
+ *      EmergencyContact:
+ *          type: object
+ *          required:
+ *            - name
+ *            - phone
+ *          properties:
+ *             eContactName:
+ *               type: string
+ *               example: 'Lois Lane'
+ *               name: Emergency Contact Name
+ *             eContactPhone:
+ *               type: string
+ *               example: '513-555-1234'
+ *               name: Emergency Contact Phone
  *      BasicRegistration:
  *          type: object
  *          required:
- *              - phone
- *              - dateOfBirth
- *              - hasAgreedToTerms
+ *                - phone
+ *                - dateOfBirth
+ *                - hasAgreedToTerms
  *          properties:
  *              _id:
  *                  type: string
@@ -49,9 +66,14 @@ export interface IGuestRegistration extends IRegistrations {
  *                  type: boolean
  *                  default: false
  *                  readonly: true
+ *              customFields:
+ *                  type: object
+ *                  additionalProperties: true
+ *                  readonly: true
  *      UserRegistration:
  *          allOf:
  *              - $ref: '#/components/schemas/BasicRegistration'
+ *              - $ref: '#/components/schemas/EmergencyContact'
  *              - type: object
  *                required:
  *                  - hasAgreedToTerms
@@ -82,6 +104,7 @@ export interface IGuestRegistration extends IRegistrations {
  *                          example: 'clark@dailyplanet.com'
  *                          pattern: '^.+\@.+\..{2,}$'
  *              - $ref: '#/components/schemas/BasicRegistration'
+ *              - $ref: '#/components/schemas/EmergencyContact'
  */
 
 // Base schema for registrations
@@ -90,7 +113,10 @@ const registrationsSchema = new Schema({
     phone: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
     hasAgreedToTerms: { type: Boolean, default: false },
-    checkedIn: { type: Boolean, default: false }
+    checkedIn: { type: Boolean, default: false },
+    eContactName: { type: String, required: true, default: '' }, // default is set for legacy registrations
+    eContactPhone: { type: String, required: true, default: '' }, // default is set for legacy registrations
+    customFields: { type: Map, of: String, default: {} }
 }, { timestamps: true })
 
 export const Registrations = model<IRegistrations>('Registrations', registrationsSchema)
