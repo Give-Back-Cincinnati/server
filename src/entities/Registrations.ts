@@ -8,8 +8,8 @@ export interface IRegistrations {
     dateOfBirth: Date,
     hasAgreedToTerms: boolean,
     checkedIn: boolean,
-    eContactName: string,
-    eContactPhone: string,
+    eContactName?: string,
+    eContactPhone?: string,
     customFields: Map<string, string>
 }
 
@@ -114,8 +114,8 @@ const registrationsSchema = new Schema({
     dateOfBirth: { type: Date, required: true },
     hasAgreedToTerms: { type: Boolean, default: false },
     checkedIn: { type: Boolean, default: false },
-    eContactName: { type: String, required: true, default: '' }, // default is set for legacy registrations
-    eContactPhone: { type: String, required: true, default: '' }, // default is set for legacy registrations
+    eContactName: { type: String, default: '' }, // default is set for legacy registrations, required is NOT set here to allow legacy checkins
+    eContactPhone: { type: String, default: '' }, // default is set for legacy registrations, required is NOT set here to allow legacy checkins
     customFields: { type: Map, of: String, default: {} }
 }, { timestamps: true })
 
