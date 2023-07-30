@@ -142,10 +142,26 @@ router.use('/login', Local)
  */
 router.use('/google', Google)
 
-router.get('/logout', async (req, res) => {
-	req.logout(() => {
-        res.sendStatus(204)
-    })
+/**
+ * @openapi
+ * /auth/logout:
+ *  post:
+ *    tags:
+ *      - auth
+ *    operationId: logout
+ *    summary: Logout
+ *    description: Logout
+ *    responses:
+ *      204:
+ *          description: Success!
+ *      401:
+ *          description: Logout Failed
+ */
+router.post('/logout', async (req, res, next) => {
+	req.logout((err) => {
+		if (err) return res.sendStatus(500)
+	})
+	res.sendStatus(204)
 })
 
 export default router
