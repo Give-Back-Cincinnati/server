@@ -170,7 +170,6 @@ eventsSchema.post("findOne", async function (doc?: IEvents) {
         doc.isFull = true
         return
     }
-
     const regCounts = registrations.reduce((acc: Record<string, number>, curr) => {
         acc[(curr as IRegistrations)['volunteerCategory']] ??= 0
         acc[(curr as IRegistrations)['volunteerCategory']] += 1
