@@ -2,7 +2,8 @@ import { logger } from '../../config/index'
 import { Response, Request } from 'express'
 import { Registrations, GuestRegistration, UserRegistration } from '../../entities/Registrations'
 import { Events } from '../../entities/Events'
-import { createFilteredQuery, createQueryOptions,
+import {
+    createFilteredQuery, createQueryOptions,
     //  createQueryOptions
 } from '../../entities/queryUtils'
 import { IUser } from 'entities/Users'
@@ -89,63 +90,67 @@ export const getRegistrations = async (req: Request, res: Response) => {
 }
 
 export const createRegistration = async (req: Request, res: Response) => {
-        try {
-            const event = await Events.findById(req.params.eventId)
-            if (!event) return res.sendStatus(404)
+    try {
+        const event = await Events.findById(req.params.eventId)
+        if (!event) return res.sendStatus(404)
 
-            if (event.maxRegistrations) {
-                // check if there are already too many registrations
-                const numRegistrations = await Registrations.countDocuments({ event: req.params.eventId })
-                if (numRegistrations >= event.maxRegistrations) {
-                    res.status(400)
-                    res.statusMessage = 'Event is full'
-                    return res.send()
-                }
+        if (event.maxRegistrations) {
+            // check if there are already too many registrations
+            const numRegistrations = await Registrations.countDocuments({ event: req.params.eventId })
+            if (numRegistrations >= event.maxRegistrations) {
+                res.status(400)
+                res.statusMessage = 'Event is full'
+                return res.send()
             }
-
-            if (req.isAuthenticated()) {
-                const nonCustomPaths = Object.keys(UserRegistration.schema.paths)
-                const customFields: Map<string, any> = new Map()
-                const userRegistration = new UserRegistration({
-                    ...req.body,
-                    event: req.params.eventId,
-                    user: req.user as IUser
-                })
-
-                Object.entries(req.body).forEach(([key, value]) => {
-                    if (nonCustomPaths.includes(key)) return
-                    customFields.set(key, value)
-                })
-                userRegistration.set('customFields', customFields)
-
-                await userRegistration.save()
-            } else {
-                const nonCustomPaths = Object.keys(GuestRegistration.schema.paths)
-                const customFields: Map<string, any> = new Map()
-                const guestRegistration = new GuestRegistration({
-                    ...req.body,
-                    event: req.params.eventId
-                })
-
-                Object.entries(req.body).forEach(([key, value]) => {
-                    if (nonCustomPaths.includes(key)) return
-                    customFields.set(key, value)
-                })
-                guestRegistration.set('customFields', customFields)
-
-                await guestRegistration.save()
-            }
-            res.status(201)
-        } catch (e) {
-            res.status(500)
-            if (e instanceof Error) {
-                res.statusMessage = e.message
-            }
-            logger.error(e)
-        } finally {
-            res.send()
         }
+
+        const [volunteerCategory] = req.body.volunteerCategory.split(' - ')
+
+        if (req.isAuthenticated()) {
+            const nonCustomPaths = Object.keys(UserRegistration.schema.paths)
+            const customFields: Map<string, any> = new Map()
+            const userRegistration = new UserRegistration({
+                ...req.body,
+                volunteerCategory,
+                event: req.params.eventId,
+                user: req.user as IUser
+            })
+
+            Object.entries(req.body).forEach(([key, value]) => {
+                if (nonCustomPaths.includes(key)) return
+                customFields.set(key, value)
+            })
+            userRegistration.set('customFields', customFields)
+
+            await userRegistration.save()
+        } else {
+            const nonCustomPaths = Object.keys(GuestRegistration.schema.paths)
+            const customFields: Map<string, any> = new Map()
+            const guestRegistration = new GuestRegistration({
+                ...req.body,
+                volunteerCategory,
+                event: req.params.eventId
+            })
+
+            Object.entries(req.body).forEach(([key, value]) => {
+                if (nonCustomPaths.includes(key)) return
+                customFields.set(key, value)
+            })
+            guestRegistration.set('customFields', customFields)
+
+            await guestRegistration.save()
+        }
+        res.status(201)
+    } catch (e) {
+        res.status(500)
+        if (e instanceof Error) {
+            res.statusMessage = e.message
+        }
+        logger.error(e)
+    } finally {
+        res.send()
     }
+}
 
 /**
  * @openapi

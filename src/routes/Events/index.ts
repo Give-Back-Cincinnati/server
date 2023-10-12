@@ -114,7 +114,7 @@ const router = Router()
 router.route('/')
     .get(userHasPermissions('public'), async (req: Request, res: Response) => {
         try {
-            const { name, category, startTime, endTime, slug }: { 
+            const { name, category, startTime, endTime, slug }: {
                 name?: string,
                 category?: string,
                 startTime?: string,
@@ -127,7 +127,7 @@ router.route('/')
             }
 
             const queryOptions = createQueryOptions(req.query)
-            
+
             const items = await Events.find(createFilteredQuery(searchFor, req), undefined, queryOptions)
             return res.json(items)
         } catch (e) {
