@@ -94,14 +94,12 @@ export const createRegistration = async (req: Request, res: Response) => {
         const event = await Events.findById(req.params.eventId)
         if (!event) return res.sendStatus(404)
 
-        if (event.maxRegistrations) {
+        if (event.isFull) {
             // check if there are already too many registrations
-            const numRegistrations = await Registrations.countDocuments({ event: req.params.eventId })
-            if (numRegistrations >= event.maxRegistrations) {
-                res.status(400)
-                res.statusMessage = 'Event is full'
-                return res.send()
-            }
+            // const numRegistrations = await Registrations.countDocuments({ event: req.params.eventId })
+            res.status(400)
+            res.statusMessage = 'Event is full'
+            return res.send()
         }
 
         const [volunteerCategory] = req.body.volunteerCategory.split(' - ')

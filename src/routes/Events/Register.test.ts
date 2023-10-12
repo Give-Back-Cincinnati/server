@@ -24,7 +24,7 @@ describe('/api/Events/:id/register', () => {
 
         describe('GET', () => {
 
-            it('responds 401 for unauthenticated user',  async () => {
+            it('responds 401 for unauthenticated user', async () => {
                 expect.assertions(1)
                 const response = await request(app).get(`/Events/${item._id}/register`)
                 expect(response.statusCode).toBe(401)
@@ -41,7 +41,7 @@ describe('/api/Events/:id/register', () => {
                 expect.assertions(3)
                 const event1 = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date() }).save()
                 await new GuestRegistration({ event: event1, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-1234' }).save()
-                
+
                 const response = await superadminAgent.get(`/Events/${item._id}/register`)
 
                 expect(response.statusCode).toBe(200)
@@ -74,9 +74,10 @@ describe('/api/Events/:id/register', () => {
                         hasAgreedToTerms: true,
                         eContactName: 'Mom',
                         eContactPhone: '513-555-1234',
+                        volunteerCategory: "Waiter"
                     })
                 const foundRegistration = await UserRegistration.findOne({ event: item._id, user: superadmin._id })
-                
+
                 expect(response.statusCode).toBe(201)
                 expect(foundRegistration).toHaveProperty('__t', 'UserRegistration')
                 expect(foundRegistration).toHaveProperty('user', superadmin._id)
@@ -86,7 +87,7 @@ describe('/api/Events/:id/register', () => {
                 expect.assertions(1)
 
                 const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), maxRegistrations: 1 }).save()
-                await new GuestRegistration({ event, firstName: 'Clark', lastName: 'Kent', email: 'clar@kent.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-1234' }).save()
+                await new GuestRegistration({ event, firstName: 'Clark', lastName: 'Kent', email: 'clar@kent.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-1234', volunteerCategory: "Waiter" }).save()
 
                 const response = await request(app).post(`/Events/${event._id}/register`).send(registrationData)
 
@@ -103,9 +104,9 @@ describe('/api/Events/:id/register', () => {
                 }
                 const registrationCustomValue = 'customValue1'
 
-                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), customFields }).save()
-                
-                const response = await request(app).post(`/Events/${event._id}/register`).send({...registrationData, customField1: registrationCustomValue})
+                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), customFields, maxRegistrations: 0 }).save()
+
+                const response = await request(app).post(`/Events/${event._id}/register`).send({ ...registrationData, customField1: registrationCustomValue, volunteerCategory: "Waiter - 1st Shift" })
 
                 const eventRegistration = await GuestRegistration.findOne({ event: event._id })
 
@@ -124,8 +125,8 @@ describe('/api/Events/:id/register', () => {
                 }
                 const registrationCustomValue = 'customValue1'
 
-                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), customFields }).save()
-                
+                const event = await new Events({ name: "Meet Your Judgement", description: 'This is a description...', category: 'Civic Engagement', address: '312 Walnut', startTime: new Date(), endTime: new Date(), customFields, maxRegistrations: 0 }).save()
+
                 const response = await superadminAgent.post(`/Events/${event._id}/register`)
                     .send({
                         phone: '513-555-1234',
@@ -133,7 +134,8 @@ describe('/api/Events/:id/register', () => {
                         hasAgreedToTerms: true,
                         eContactName: 'Mom',
                         eContactPhone: '513-555-1234',
-                        customField1: registrationCustomValue
+                        customField1: registrationCustomValue,
+                        volunteerCategory: "Waiter - 1st Shift"
                     })
 
                 const eventRegistration = await UserRegistration.findOne({ event: event })
@@ -142,7 +144,7 @@ describe('/api/Events/:id/register', () => {
                 expect(response.statusCode).toBe(201)
                 expect(eventRegistration?.customFields.get('customField1')).toEqual(registrationCustomValue)
             })
-        })        
+        })
     })
 
     describe('/:registrationId', () => {
@@ -179,14 +181,14 @@ describe('/api/Events/:id/register', () => {
         describe('DELETE', () => {
             it('cannot be deleted by an unauthenticated user', async () => {
                 expect.assertions(1)
-    
+
                 const response = await request(app)
                     .delete(`/Events/${item._id}/register/${guestRegistration._id}`)
                     .send()
-                
+
                 expect(response.statusCode).toBe(401)
             })
-    
+
             it('can be deleted by a superadmin', async () => {
                 expect.assertions(3)
 
@@ -198,8 +200,8 @@ describe('/api/Events/:id/register', () => {
                     .delete(`/Events/${item._id}/register/${guestRegistration._id}`)
                     .send()
                 expect(response.statusCode).toBe(204)
-                
-                const foundUsers = await Registrations.find({ _id: guestRegistration._id})
+
+                const foundUsers = await Registrations.find({ _id: guestRegistration._id })
                 expect(foundUsers).toHaveLength(0)
             })
         })

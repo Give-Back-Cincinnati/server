@@ -168,6 +168,7 @@ eventsSchema.post("findOne", async function (doc?: IEvents) {
 
     if (doc.maxRegistrations && registrations.length >= doc.maxRegistrations) {
         doc.isFull = true
+        return
     }
 
     const regCounts = registrations.reduce((acc: Record<string, number>, curr) => {
@@ -176,12 +177,14 @@ eventsSchema.post("findOne", async function (doc?: IEvents) {
         return acc
     }, {})
 
-    Array.from(doc.volunteerCategories.entries()).forEach(([key, category]) => {
-        if (category.capacity !== 0 && category.capacity <= regCounts[category.name]) {
-            if (!doc) return
-            doc.volunteerCategories.delete(key)
-        }
-    })
+    if (doc.volunteerCategories) {
+        Array.from(doc.volunteerCategories.entries()).forEach(([key, category]) => {
+            if (category.capacity !== 0 && category.capacity <= regCounts[category.name]) {
+                if (!doc) return
+                doc.volunteerCategories.delete(key)
+            }
+        })
+    }
 })
 
 export const Events = model<IEvents>('Events', eventsSchema)
