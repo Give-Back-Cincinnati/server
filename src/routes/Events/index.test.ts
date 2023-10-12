@@ -5,7 +5,11 @@ import { getLoggedInSuperAdminAgent } from '../../../jest/utilities'
 import { app } from '../index'
 import { Events } from '../../entities/Events'
 
-const eventData = { name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date()}
+const eventData = {
+    name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On',
+    volunteerCategories: { server: { capacity: 100 } },
+    address: '312 Walnut', startTime: new Date(), endTime: new Date()
+}
 
 // suppress error messages
 jest.spyOn(console, 'error')
@@ -24,13 +28,13 @@ describe('/api/Events', () => {
             const response = await superadminAgent.get('/Events')
             expect(response.statusCode).toBe(200)
         })
-        
-        it('returns all Events', async() => {
+
+        it('returns all Events', async () => {
             const response = await superadminAgent.get('/Events')
             expect(response.body.length).toBe(1)
         })
 
-        it('returns Events based on search query', async() => {
+        it('returns Events based on search query', async () => {
             const response = await superadminAgent.get('/Events').query({ name: 'not a real event name...' })
             expect(response.body.length).toBe(0)
         })
@@ -44,6 +48,11 @@ describe('/api/Events', () => {
         })
 
         it('returns a 201', async () => {
+            const response = await superadminAgent.post('/Events').send(eventData)
+            expect(response.statusCode).toBe(201)
+        })
+
+        it('returns a 201 with volunteerCategories', async () => {
             const response = await superadminAgent.post('/Events').send(eventData)
             expect(response.statusCode).toBe(201)
         })
@@ -68,7 +77,7 @@ describe('/api/Events', () => {
             const response = await superadminAgent.post('/Events').send({ _id: 'asdasfas' })
             expect(response.statusCode).toEqual(500)
         })
-    
+
     })
 
     describe('/:id', () => {
@@ -161,6 +170,6 @@ describe('/api/Events', () => {
             })
 
         })
-    
+
     })
 })

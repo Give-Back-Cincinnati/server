@@ -13,8 +13,8 @@ const { Roles } = require('../src/entities/Roles')
 const { Permissions } = require('../src/entities/Permissions')
 
 export const dynamicpage = new DynamicPages({ _id: mongoose.Types.ObjectId(), name: 'test', url: 'test', experience: JSON.stringify([{ component: 'Header', props: { title: 'Edited Title' } }]) })
-export const event = { _id: mongoose.Types.ObjectId(), name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date() }
-export const guestRegistration = { _id: mongoose.Types.ObjectId(), event, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-4321' }
+export const event = { _id: mongoose.Types.ObjectId(), name: "Don't Rock the Boat", description: 'This is a description...', category: 'Hands-On', address: '312 Walnut', startTime: new Date(), endTime: new Date(), volunteerCategories: { server: { capacity: 100 } }, }
+export const guestRegistration = { _id: mongoose.Types.ObjectId(), event, firstName: 'Clark', lastName: 'Kent', email: 'clark@failyplanet.com', dateOfBirth: new Date(), phone: '513-555-1234', eContactName: 'Mom', eContactPhone: '513-555-4321', volunteerCategory: "Waiter - 1st Shift" }
 export const filter: IFilters = { _id: mongoose.Types.ObjectId(), name: 'user', filter: { firstName: 'hello' } }
 export const role: IRoles = { _id: mongoose.Types.ObjectId(), name: 'USER', permissions: [], filters: [filter] }
 export const password = 'password'
@@ -48,10 +48,10 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
-	await new DynamicPages(dynamicpage).save()
-	await new Events(event).save()
-	await new GuestRegistration(guestRegistration).save()
-	await new Filters(filter).save()
+    await new DynamicPages(dynamicpage).save()
+    await new Events(event).save()
+    await new GuestRegistration(guestRegistration).save()
+    await new Filters(filter).save()
     await Promise.all(allPermissions.map(permission => new Permissions(permission).save()))
 
     // default user should have 
@@ -60,7 +60,7 @@ beforeEach(async () => {
     await Roles(role).save()
     await Users(user).save()
 
-    
+
     // create a superadmin with all permissions
     superadminRole.permissions = allPermissions
     await new Roles(superadminRole).save()
@@ -71,10 +71,10 @@ afterEach(async () => {
     if (mongoose.connection.readyState !== 1) {
         await mongoose.connect(global.__MONGO_URI__)
     }
-	await DynamicPages.deleteMany({})
-	await Registrations.deleteMany({})
-	await Events.deleteMany({})
-	await Filters.deleteMany({})
+    await DynamicPages.deleteMany({})
+    await Registrations.deleteMany({})
+    await Events.deleteMany({})
+    await Filters.deleteMany({})
     await Users.deleteMany({})
     await Roles.deleteMany({})
     await Permissions.deleteMany({})
@@ -87,9 +87,9 @@ afterAll(async () => {
     await Users.deleteMany({})
     await Roles.deleteMany({})
     await Permissions.deleteMany({})
-	await Filters.deleteMany({})
-	await Events.deleteMany({})
-	await Registrations.deleteMany({})
-	await DynamicPages.deleteMany({})
+    await Filters.deleteMany({})
+    await Events.deleteMany({})
+    await Registrations.deleteMany({})
+    await DynamicPages.deleteMany({})
     await mongoose.disconnect()
 })

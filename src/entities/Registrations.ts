@@ -11,6 +11,7 @@ export interface IRegistrations {
     eContactName?: string,
     eContactPhone?: string,
     customFields: Map<string, string>
+    volunteerCategory: string
 }
 
 export interface IUserRegistration extends IRegistrations {
@@ -47,6 +48,7 @@ export interface IGuestRegistration extends IRegistrations {
  *                - phone
  *                - dateOfBirth
  *                - hasAgreedToTerms
+ *                - volunteerCategory
  *          properties:
  *              _id:
  *                  type: string
@@ -58,10 +60,8 @@ export interface IGuestRegistration extends IRegistrations {
  *              dateOfBirth:
  *                  type: string
  *                  format: date
- *              hasAgreedToTerms:
- *                  type: boolean
- *                  default: false
- *                  name: I have read and agree to the terms and conditions
+ *              volunteerCategory:
+ *                  type: string
  *              checkedIn:
  *                  type: boolean
  *                  default: false
@@ -70,6 +70,10 @@ export interface IGuestRegistration extends IRegistrations {
  *                  type: object
  *                  additionalProperties: true
  *                  readonly: true
+ *              hasAgreedToTerms:
+ *                  type: boolean
+ *                  default: false
+ *                  name: I have read and agree to the terms and conditions
  *      UserRegistration:
  *          allOf:
  *              - $ref: '#/components/schemas/BasicRegistration'
@@ -116,7 +120,8 @@ const registrationsSchema = new Schema({
     checkedIn: { type: Boolean, default: false },
     eContactName: { type: String, default: '' }, // default is set for legacy registrations, required is NOT set here to allow legacy checkins
     eContactPhone: { type: String, default: '' }, // default is set for legacy registrations, required is NOT set here to allow legacy checkins
-    customFields: { type: Map, of: String, default: {} }
+    customFields: { type: Map, of: String, default: {} },
+    volunteerCategory: { type: String, default: '' }
 }, { timestamps: true })
 
 export const Registrations = model<IRegistrations>('Registrations', registrationsSchema)

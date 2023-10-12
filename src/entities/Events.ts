@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose'
 import { nanoid } from 'nanoid'
+import { IRegistrations, Registrations } from './Registrations'
 
 export interface IEvents {
     _id: Types.ObjectId,
@@ -21,6 +22,8 @@ export interface IEvents {
         name?: string,
         isRequired?: boolean
     }>
+    volunteerCategories: Map<string, { capacity: number, name: string, shift: string }>
+    isFull?: boolean
 }
 
 /**
@@ -68,6 +71,21 @@ export interface IEvents {
  *                  format: date-time
  *              maxRegistrations:
  *                  type: number
+ *              volunteerCategories:
+ *                  type: object
+ *                  additionalProperties:
+ *                      type: object
+ *                      properties:
+ *                         type:
+ *                            type: string
+ *                            enum: ['object']
+ *                            readonly: true
+ *                         capacity:
+ *                            type: number
+ *                         name:
+ *                            type: string
+ *                         shift:
+ *                            type: string
  *              customFields:
  *                  type: object
  *                  additionalProperties: 
@@ -78,12 +96,12 @@ export interface IEvents {
  *                              enum: ['string']
  *                          name:
  *                              type: string
+ *                          isRequired:
+ *                             type: boolean
  *                          enum:
  *                             type: array
  *                             items:
  *                                type: string
- *                          isRequired:
- *                             type: boolean
  */
 export const eventsSchema = new Schema({
     name: { type: String, required: true },
@@ -107,13 +125,24 @@ export const eventsSchema = new Schema({
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     maxRegistrations: Number,
+    volunteerCategories: {
+        type: Map,
+        of: {
+            type: { type: String, enum: ['object'], default: 'object' },
+            properties: {
+                name: { type: String, required: true },
+                capacity: { type: Number, default: 0 },
+                shift: { Type: String, default: '' }
+            }
+        }
+    },
     customFields: {
         type: Map,
-        of: { 
+        of: {
             type: { type: String, enum: ['string', 'enum'] },
             enum: [String],
             isRequired: { type: Boolean, default: false },
-         },
+        },
         default: {}
     }
 }, { timestamps: true })
@@ -130,6 +159,31 @@ eventsSchema.pre('save', async function () {
         if (slugExistsEntity) {
             this.slug += nanoid(3)
         }
+    }
+})
+
+eventsSchema.post("findOne", async function (doc?: IEvents) {
+    if (!doc) return
+    const registrations = await Registrations.find({ event: doc })
+
+    if (doc.maxRegistrations && registrations.length >= doc.maxRegistrations) {
+        doc.isFull = true
+        return
+    }
+
+    const regCounts = registrations.reduce((acc: Record<string, number>, curr) => {
+        acc[(curr as IRegistrations)['volunteerCategory']] ??= 0
+        acc[(curr as IRegistrations)['volunteerCategory']] += 1
+        return acc
+    }, {})
+
+    if (doc.volunteerCategories) {
+        Array.from(doc.volunteerCategories.entries()).forEach(([key, category]) => {
+            if (category.capacity !== 0 && category.capacity <= regCounts[category.name]) {
+                if (!doc) return
+                doc.volunteerCategories.delete(key)
+            }
+        })
     }
 })
 
