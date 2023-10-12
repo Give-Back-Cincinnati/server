@@ -105,9 +105,9 @@ describe('/api/Events', () => {
                 expect(response.statusCode).toBe(500)
             })
 
-            it('returns a 401 for a user without permissions', async () => {
+            it('returns a 200 for an unauthenticated user', async () => {
                 const response = await request(app).get(`/Events/${item._id}`)
-                expect(response.statusCode).toBe(401)
+                expect(response.statusCode).toBe(200)
             })
 
         })

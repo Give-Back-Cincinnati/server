@@ -206,7 +206,7 @@ router.route('/')
  *              description: An unknown error occurred
  */
 router.route('/:id')
-    .get(userHasPermissions(), async (req: Request, res: Response) => {
+    .get(userHasPermissions("public"), async (req: Request, res: Response) => {
         try {
             const item = await Events.findOne(createFilteredQuery({ _id: req.params.id }, req))
             if (item) {
