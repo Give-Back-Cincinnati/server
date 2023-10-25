@@ -134,7 +134,8 @@ export const eventsSchema = new Schema({
                 capacity: { type: Number, default: 0 },
                 shift: { Type: String, default: '' }
             }
-        }
+        },
+        default: new Map()
     },
     customFields: {
         type: Map,
@@ -143,7 +144,7 @@ export const eventsSchema = new Schema({
             enum: [String],
             isRequired: { type: Boolean, default: false },
         },
-        default: {}
+        default: new Map()
     }
 }, { timestamps: true })
 

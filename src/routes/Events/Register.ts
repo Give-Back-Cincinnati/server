@@ -102,7 +102,11 @@ export const createRegistration = async (req: Request, res: Response) => {
             return res.send()
         }
 
-        const [volunteerCategory] = req.body.volunteerCategory.split(' - ')
+        let volunteerCategory = ''
+        if (event.volunteerCategories.size > 0) {
+            const [cat] = req.body.volunteerCategory.split(' - ')
+            volunteerCategory = cat
+        }
 
         if (req.isAuthenticated()) {
             const nonCustomPaths = Object.keys(UserRegistration.schema.paths)
