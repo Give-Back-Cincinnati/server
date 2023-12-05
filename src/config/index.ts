@@ -26,9 +26,9 @@ export const config = {
         password: process.env.MONGODB_PASSWORD || undefined,
         database: process.env.MONGODB_DATABASE || 'index',
         options: {
-          readPreference: 'primary',
+            readPreference: 'primary',
         },
-      },
+    },
     redis: {
         url: process.env.REDIS_URL || 'redis://redis:6379',
         secret: process.env.REDIS_SECRET || 'secret'
@@ -39,7 +39,8 @@ export const config = {
     },
     bcrypt: {
         saltRounds: parseInt(process.env.SALT_ROUNDS || "1") // recommend 13 in production
-    }
+    },
+    email_connection_string: process.env.SEND_EMAIL_CONNECTION_STRING,
 }
 
 export const logger = console
