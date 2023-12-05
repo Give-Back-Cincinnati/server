@@ -2,11 +2,16 @@ import { logger } from '../../config/index'
 import { Response, Request } from 'express'
 import { Registrations, GuestRegistration, UserRegistration } from '../../entities/Registrations'
 import { Events } from '../../entities/Events'
+import { Users } from '../../entities/Users'
+import { GetEmailService } from '../../services/emailService';
 import {
     createFilteredQuery, createQueryOptions,
     //  createQueryOptions
 } from '../../entities/queryUtils'
-import { IUser } from 'entities/Users'
+import { IUser } from '../../entities/Users'
+import { registrationEmailTemplate } from './registrationEmailTemplate'
+
+const emailService = GetEmailService();
 
 /**
  * @openapi
@@ -89,6 +94,7 @@ export const getRegistrations = async (req: Request, res: Response) => {
     }
 }
 
+
 export const createRegistration = async (req: Request, res: Response) => {
     try {
         const event = await Events.findById(req.params.eventId)
@@ -108,6 +114,21 @@ export const createRegistration = async (req: Request, res: Response) => {
             volunteerCategory = cat
         }
 
+        const coreRegistrationEmail = {
+            content: {
+                subject: `Registration Confirmation: ${event.name}`,
+                plainText: `We're excited for you to join us at ${event.name}!
+                
+                As we finalize event details, please stay tuned for any updates and additional information. We'll keep you informed about the agenda on our website and you'll receive an email the shortly before with final details.
+                
+                If you have any immediate questions or concerns, feel free to reach out to us at operations-vp@givebackcincinnati.org. Thanks for being a part of our mission!`,
+                html: registrationEmailTemplate
+                    .replace(/{{ event_name }}/g, event.name)
+                ,
+            },
+
+        }
+
         if (req.isAuthenticated()) {
             const nonCustomPaths = Object.keys(UserRegistration.schema.paths)
             const customFields: Map<string, any> = new Map()
@@ -118,6 +139,7 @@ export const createRegistration = async (req: Request, res: Response) => {
                 user: req.user as IUser
             })
 
+
             Object.entries(req.body).forEach(([key, value]) => {
                 if (nonCustomPaths.includes(key)) return
                 customFields.set(key, value)
@@ -125,6 +147,23 @@ export const createRegistration = async (req: Request, res: Response) => {
             userRegistration.set('customFields', customFields)
 
             await userRegistration.save()
+            const user = await Users.findById(req.user)
+            if (user && user.email) {
+                const name = `${user?.firstName} ${user?.lastName}`
+                coreRegistrationEmail.content.html = coreRegistrationEmail
+                    .content.html.replace(/{{ name }}/g, name)
+                void emailService.sendEmail({
+                    ...coreRegistrationEmail,
+                    recipients: {
+                        to: [
+                            {
+                                address: user.email,
+                                displayName: name,
+                            },
+                        ],
+                    },
+                })
+            }
         } else {
             const nonCustomPaths = Object.keys(GuestRegistration.schema.paths)
             const customFields: Map<string, any> = new Map()
@@ -141,6 +180,20 @@ export const createRegistration = async (req: Request, res: Response) => {
             guestRegistration.set('customFields', customFields)
 
             await guestRegistration.save()
+            const name = `${guestRegistration.firstName} ${guestRegistration.lastName}`
+            coreRegistrationEmail.content.html = coreRegistrationEmail
+                .content.html.replace(/{{ name }}/g, name)
+            void emailService.sendEmail({
+                ...coreRegistrationEmail,
+                recipients: {
+                    to: [
+                        {
+                            address: guestRegistration.email,
+                            displayName: `${guestRegistration.firstName} ${guestRegistration.lastName}`,
+                        },
+                    ],
+                },
+            })
         }
         res.status(201)
     } catch (e) {
