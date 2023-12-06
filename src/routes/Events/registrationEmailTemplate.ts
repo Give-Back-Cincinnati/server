@@ -78,7 +78,7 @@ export const registrationEmailTemplate = `<!DOCTYPE html>
     </p>
     <p>
       As we finalize event details, please stay tuned for any updates and additional information. We'll keep you
-      informed about the agenda on our website and you'll receive an email the shortly before with final details.
+      informed about the agenda on our website and you'll receive an email shortly before with final details.
     </p>
     <p>
       If you have any immediate questions or concerns, feel free to reach out to us at <a
