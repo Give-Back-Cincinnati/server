@@ -107,6 +107,10 @@ export interface IGuestRegistration extends IRegistrations {
  *                          type: string
  *                          example: 'clark@dailyplanet.com'
  *                          pattern: '^.+\@.+\..{2,}$'
+ *                      firstEvent:
+ *                          type: boolean
+ *                          default: false
+ *                          name: Is this your first event with us?
  *              - $ref: '#/components/schemas/BasicRegistration'
  *              - $ref: '#/components/schemas/EmergencyContact'
  */
@@ -136,6 +140,7 @@ export const UserRegistration = Registrations.discriminator<IUserRegistration>('
 export const guestRegistrationSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    firstEvent: { type: Boolean, default: false },
     email: { type: String, match: /^.+@.+\..{2,}$/i, lowercase: true, required: true },
 })
 export const GuestRegistration = Registrations.discriminator<IGuestRegistration>('GuestRegistration', guestRegistrationSchema)
